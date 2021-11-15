@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.forum.mapper.ForumMessageMapper">
+    
+    <resultMap type="ForumMessage" id="ForumMessageResult">
+        <result property="id"    column="id"    />
+        <result property="fromId"    column="from_id"    />
+        <result property="fromName"    column="from_name"    />
+        <result property="toId"    column="to_id"    />
+        <result property="toName"    column="to_name"    />
+        <result property="type"    column="type"    />
+        <result property="title"    column="title"    />
+        <result property="content"    column="content"    />
+        <result property="readFlag"    column="read_flag"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectForumMessageVo">
+        select id, from_id, from_name, to_id, to_name, type, title, content, read_flag, create_time from forum_message
+    </sql>
+
+    <select id="selectForumMessageList" parameterType="ForumMessage" resultMap="ForumMessageResult">
+        <include refid="selectForumMessageVo"/>
+        <where>  
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="readFlag != null "> and read_flag = #{readFlag}</if>
+        </where>
+        order  by create_time desc
+    </select>
+    
+    <select id="selectForumMessageById" parameterType="Long" resultMap="ForumMessageResult">
+        <include refid="selectForumMessageVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertForumMessage" parameterType="ForumMessage" useGeneratedKeys="true" keyProperty="id">
+        insert into forum_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fromId != null">from_id,</if>
+            <if test="fromName != null">from_name,</if>
+            <if test="toId != null">to_id,</if>
+            <if test="toName != null">to_name,</if>
+            <if test="type != null">type,</if>
+            <if test="title != null">title,</if>
+            <if test="content != null">content,</if>
+            <if test="readFlag != null">read_flag,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fromId != null">#{fromId},</if>
+            <if test="fromName != null">#{fromName},</if>
+            <if test="toId != null">#{toId},</if>
+            <if test="toName != null">#{toName},</if>
+            <if test="type != null">#{type},</if>
+            <if test="title != null">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="readFlag != null">#{readFlag},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateForumMessage" parameterType="ForumMessage">
+        update forum_message
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fromId != null">from_id = #{fromId},</if>
+            <if test="fromName != null">from_name = #{fromName},</if>
+            <if test="toId != null">to_id = #{toId},</if>
+            <if test="toName != null">to_name = #{toName},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="readFlag != null">read_flag = #{readFlag},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteForumMessageById" parameterType="Long">
+        delete from forum_message where id = #{id}
+    </delete>
+
+    <delete id="deleteForumMessageByIds" parameterType="String">
+        delete from forum_message where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="selectByMsgType" parameterType="String" resultMap="ForumMessageResult">
+        select * from forum_message
+        <where>
+            type = #{type}
+            <if test="type != null  and type != 'public' "> and to_id = #{userId}</if>
+        </where>
+
+    </select>
+
+    <select id="selectByAllType" parameterType="String" resultMap="ForumMessageResult">
+
+		(SELECT * from  forum_message where type='notice' ORDER BY create_time desc )
+		UNION ALL
+		(SELECT * from  forum_message where type='system' and to_id=#{userId} ORDER BY create_time)
+		UNION ALL
+		(SELECT * from  forum_message where type='recommend' and to_id=#{userId} ORDER BY create_time desc)
+		UNION ALL
+		(SELECT * from  forum_message where type='focus' and to_id=#{userId} ORDER BY create_time desc )
+
+	</select>
+    <select id="countMessages" parameterType="String" resultType="map">
+		select * from(
+		(select count(1) as mcount from forum_message where to_id=#{userId} and type!='private' and type!='comment'  and read_flag=0) a,
+		(select count(1) as ccount from forum_message where to_id=#{userId} and type ='comment' and read_flag=0) b,
+		(select count(1) as pcount from forum_message where type='private'and to_id=#{userId} and read_flag=0) c
+         )
+	</select>
+    <update id="updateReadFlag" parameterType="String">
+		update forum_message
+		set read_flag=1
+		where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+	</update>
+    <select id="selectComments" parameterType="String" resultMap="ForumMessageResult">
+		SELECT * from  forum_message where type='comment' and to_id=#{userId} ORDER BY create_time desc
+	</select>
+
+    <select id="selectPrivateMessage" parameterType="String" resultMap="ForumMessageResult">
+		SELECT * from  forum_message where type='private' and to_id=#{userId} ORDER BY create_time desc
+	</select>
+
+</mapper>

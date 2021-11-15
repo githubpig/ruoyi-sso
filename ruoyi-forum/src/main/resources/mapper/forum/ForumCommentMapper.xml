@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.forum.mapper.ForumCommentMapper">
+    
+    <resultMap type="ForumComment" id="ForumCommentResult">
+        <result property="id"    column="id"    />
+        <result property="pid"    column="pid"    />
+        <result property="tid"    column="tid"    />
+        <result property="type"    column="type"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="content"    column="content"    />
+        <result property="upVote"    column="up_vote"    />
+        <result property="downVote"    column="down_vote"    />
+        <result property="qq"    column="qq"    />
+        <result property="email"    column="email"    />
+        <result property="ip"    column="ip"    />
+        <result property="address"    column="address"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="available"    column="available"    />
+        <result property="parentName" column="parent_name" />
+    </resultMap>
+
+    <sql id="selectForumCommentVo">
+        select id, pid, tid, type, user_id, user_name, avatar, content, up_vote, down_vote, qq, email, ip, address, create_time, available from forum_comment
+    </sql>
+
+    <select id="selectForumCommentList" parameterType="ForumComment" resultMap="ForumCommentResult">
+        <include refid="selectForumCommentVo"/>
+        <where>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="tid != null  and tid != ''"> and tid = #{tid}</if>
+            <if test="qq != null  and qq != ''"> and qq = #{qq}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="ip != null  and ip != ''"> and ip = #{ip}</if>
+            <if test="available != null "> and available = #{available}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectForumCommentById" parameterType="Long" resultMap="ForumCommentResult">
+        select t.id, t.pid, t.tid, t.type, t.user_id, t.user_name, t.avatar, t.content, t.up_vote, t.down_vote, t.qq, t.email, t.ip, t.address, t.create_time, t.available, p.tid as parent_name
+        from forum_comment t
+        left join forum_comment p on p.id = t.pid
+        where t.id = #{id}
+    </select>
+        
+    <insert id="insertForumComment" parameterType="ForumComment" useGeneratedKeys="true" keyProperty="id">
+        insert into forum_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pid != null">pid,</if>
+            <if test="tid != null">tid,</if>
+            <if test="type != null">type,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="content != null">content,</if>
+            <if test="upVote != null">up_vote,</if>
+            <if test="downVote != null">down_vote,</if>
+            <if test="qq != null">qq,</if>
+            <if test="email != null">email,</if>
+            <if test="ip != null">ip,</if>
+            <if test="address != null">address,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="available != null">available,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pid != null">#{pid},</if>
+            <if test="tid != null">#{tid},</if>
+            <if test="type != null">#{type},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="content != null">#{content},</if>
+            <if test="upVote != null">#{upVote},</if>
+            <if test="downVote != null">#{downVote},</if>
+            <if test="qq != null">#{qq},</if>
+            <if test="email != null">#{email},</if>
+            <if test="ip != null">#{ip},</if>
+            <if test="address != null">#{address},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="available != null">#{available},</if>
+         </trim>
+    </insert>
+
+    <update id="updateForumComment" parameterType="ForumComment">
+        update forum_comment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pid != null">pid = #{pid},</if>
+            <if test="tid != null">tid = #{tid},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="upVote != null">up_vote = #{upVote},</if>
+            <if test="downVote != null">down_vote = #{downVote},</if>
+            <if test="qq != null">qq = #{qq},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="ip != null">ip = #{ip},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="available != null">available = #{available},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteForumCommentById" parameterType="Long">
+        delete from forum_comment where id = #{id}
+    </delete>
+
+    <delete id="deleteForumCommentByIds" parameterType="String">
+        delete from forum_comment where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="selectCommentCount" parameterType="String" resultType="Integer">
+         select count(1) from forum_comment
+         where tid=#{tid} and available = 1
+    </select>
+
+    <update id="upVote" parameterType="String">
+        update forum_comment set up_vote=up_vote+1 where id=#{#id}
+    </update>
+
+</mapper>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>签到规则说明</title>
+
+    <style>
+        body{font:14px Comic Sans MS,Helvetica,Arial,sans-serif;line-height:25px;padding:0px;margin:0px;background:#eee;}div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td{margin:0px;padding:0px;}table{border-collapse:collapse;}a,img{border:0;}ol,ul{list-style:none}input,textarea,select{outline:none}a{color:#454545;text-decoration:none;}a:hover{color:#009688;}.clearfix{clear:both;width:0px;height:0px;overflow:hidden;}.container{margin:auto;width:1170px;}.yzm_header{position:fixed;left:0;top:0;z-index:100;width:100%;height:60px;border-bottom:1px solid #404553;border-radius:0;background:#393D49;}.yzm_header a{color:rgba(255,255,255,.7);}.yzm_logo{float:left;margin-top:10px;margin-right:50px;font-size:18px;line-height:40px;font-family:Helvetica,Arial,sans-serif;color:rgba(255,255,255,.7);}.yzm_logo img{width:137px;}.yzm_header .yzm_nav a{color:rgba(255,255,255,.7);font-size:16px;}.yzm_header a:hover{color:rgba(255,255,255);}.yzm_nav{float:left;}.yzm_nav li{height:60px;padding:0 20px;line-height:60px;float:left}.yzm_nav li a{width:100%;display:block;}.yzm_nav li a:hover{color:#fff;}.yzm_nav_right{float:right}.yzm_nav_right span{width:50px;height:60px;line-height:60px;float:left}.yzm_nav_right .yzm_user_avatar{width:60px;}.yzm_user_avatar img{height:40px;margin-top:10px}.yzm_nav_right span a{width:100%;display:block;}.yzm_nav_right span a:hover{color:#fff;}.yzm_nav_right .yzm_login_status{width:145px;height:60px;}.yzm_nav_right .yzm_login_status span{display:block;width:100px;overflow:hidden;text-overflow:ellipsis;float:left;text-align:right;transition:all 0.3s}.yzm_login_status img{height:40px;width:40px;margin-left:5px;margin-top:10px;border-radius:100%}.yzm_nav_right .yzm_login_status a:hover>span{color:#fff;}.yzm_user_menu{width:100px;float:right;line-height:36px;padding:5px 0;box-shadow:0 2px 4px rgba(0,0,0,.12);border:1px solid #d2d2d2;background-color:#fff;border-radius:2px;white-space:nowrap;display:none}.yzm_user_menu li a{color:#333;display:block;padding-left:15px;text-align:left}.yzm_user_menu li a:hover{background:#eee;color:#333}.yzm_login_status:hover>ul{display:block}.yzm_header_children{margin-top:60px;background:#fff;overflow:hidden;min-width:1170px;}.yzm_header_children .yzm_nav_children li{width:auto;padding:0px;margin:0 30px;height:50px;line-height:50px;}.yzm_header_children .yzm_nav_children .yzm_nav_current,.yzm_nav_children li a:hover{color:#009688;}.yzm_header_children .yzm_search{margin-top:10px;margin-bottom:7px}.yzm_header_children .yzm_search input{width:230px;height:30px;line-height:30px;border:1px solid #d2d2d2;padding:0 3px;background:#fff}.yzm_header_children .yzm_search input:focus{border:1px solid #9a9a9a;outline:medium none;transition:all 0.218s ease 0s;}.yzm_header_children .yzm_search input.yzm_button{width:auto;display:inline-block;height:32px;line-height:32px;padding:0 18px;background-color:#009688;color:#fff;white-space:nowrap;text-align:center;font-size:14px;border:none;border-radius:2px;cursor:pointer;}.yzm_font{font:14px Comic Sans MS,Microsoft YaHei,Microsoft JhengHei,Arial  !important;}.yzm_page{margin:20px 0 10px 0;height:30px;line-height:30px;text-align:center}.yzm_page .pageinfo{margin-right:3px;color:#808080;font-size:14px;padding:4px 10px;border:1px solid #aaa;background:#fff}.yzm_page .pageinfo strong{font-weight:normal;margin:0 3px}.yzm_page a{border:1px solid #aaa;background:#fff;color:#808080;padding:4px 10px;margin-left:5px;transition:all 0.2s}.yzm_page a:hover,.yzm_page .curpage{background:#333;color:#fff;text-decoration:none;border:1px solid #000;}.yzm_page .nopage{cursor:not-allowed;}.yzm_page .nopage:hover{background:#fff;color:#808080;border:1px solid #aaa;}.yzm_footer{background:#393D49;color:#bbb;padding:20px 0;min-width:1170px;}.yzm_footer a{color:#dadada;}.yzm_footer a:hover{color:#fafafa;}.yzm_scrolltop{width:50px;height:100px;background-color:rgb(0,150,136);border:1px solid #eee;z-index:1;bottom:70px;left:50%;margin-left:590px;margin-top:-50px;position:fixed;}.yzm_scrolltop a{width:50px;height:49px;display:block;text-align:center;line-height:49px;font-size:12px;color:#fff;text-decoration:none;transition:all 0.3s}.yzm_scrolltop a:hover{background-color:rgb(26,160,148)}.yzm_posts{border-bottom:1px solid #eee;}.yzm_entrance a{background:#00ABE9;display:block;text-align:center;color:#fff;width:90%;margin:0 auto;height:50px;line-height:50px;font-size:16px;transition:all 0.2s;margin-bottom:10px;}.yzm_entrance a:hover{opacity:0.9;}.yzm_blue_btn a{background:#075CAF}@media screen and (max-width:640px){.yzm_header_children .yzm_nav_children li{margin:0 5px;}}
+        .yzm-notification-box{position:fixed;z-index:999;border:1px #ccc solid;bottom:0px;right:0px;width:300px;height:200px;background:#fff;display:none;border-top-left-radius:3px;box-shadow:0px 0px 10px #aaa;overflow:hidden;}.yzm-notification-title{height:35px;line-height:35px;background:#282b33;padding:0px 10px;font-size:12px;color:#fff;border-top-left-radius:3px;overflow:hidden;}.yzm-notification-title i{font-size:12px;transition:all 0.3s}.yzm-notification-t{float:left;}.yzm-notification-t i{margin-right:6px}.yzm-notification-close{float:right;cursor:pointer;}.yzm-notification-close i:hover{color:#888;}.yzm-notification-content{font-size:12px;height:150px;color:#222;padding:10px;overflow-y:auto;}.yzm-notification-content p{line-height:22px;margin-bottom:5px}.yzm-notification-content p a{color:#0c64eb;text-decoration:none;margin:0 2px;transition:all 0.3s}.yzm-notification-content p a:hover{color:#0063fc;}.yzm-notification-content p span{margin:0 3px;color:red;}
+        /*YZMCMS轻论坛 Powered By www.yzmcms.com */
+        body{background: #fff;padding:0px 10px}
+        p{margin:10px 0;}
+        .yzm_table{width:100%;border-collapse:collapse;border: 1px solid #e6e6e6}
+        .yzm_table th,td{text-align: center;border: 1px solid #e6e6e6;}
+        .yzm_table tr{border: 1px solid #e6e6e6;height:35px;line-height: 35px}
+    </style>
+</head>
+<body>
+<p>“签到”获取积分，规则如下</p>
+<table class="yzm_table">
+    <tr style="background: #f2f2f2">
+        <th>
+            连续签到天数
+        </th>
+        <th>
+            每日获取积分
+        </th>
+    </tr>
+    <tr>
+        <td>
+            连续签到 1 天
+        </td>
+        <td>
+            2
+        </td>
+    </tr>
+    <tr>
+        <td>
+            连续签到 2 天
+        </td>
+        <td>
+            4
+        </td>
+    </tr>
+    <tr>
+        <td>
+            连续签到 3 天
+        </td>
+        <td>
+            6
+        </td>
+    </tr>
+    <tr>
+        <td>
+            连续签到 4 天
+        </td>
+        <td>
+            8
+        </td>
+    </tr>
+    <tr>
+        <td>
+            连续签到 >=5 天
+        </td>
+        <td>
+            10
+        </td>
+    </tr>
+</table>
+<p style="color:red">*中间若有间隔，则连续天数重新计算</p>
+</body>
+</html>

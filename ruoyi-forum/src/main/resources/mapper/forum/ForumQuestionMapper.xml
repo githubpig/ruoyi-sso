@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.forum.mapper.ForumQuestionMapper">
+    
+    <resultMap type="ForumQuestion" id="ForumQuestionResult">
+        <result property="id"    column="id"    />
+        <result property="yhid"    column="yhid"    />
+        <result property="questionRegion"    column="question_region"    />
+        <result property="author"    column="author"    />
+        <result property="publishTime"    column="publish_time"    />
+        <result property="title"    column="title"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="tags"    column="tags"    />
+        <result property="hit"    column="hit"    />
+        <result property="commentFlag"    column="comment_flag"    />
+        <result property="upVote"    column="up_vote"    />
+        <result property="favourite"    column="favourite"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="available"    column="available"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="favouriteTime"    column="favourite_time"    />
+        <result property="attachment"    column="attachment"    />
+        <result property="downloadType"    column="download_type"    />
+        <result property="payType"    column="pay_type"    />
+        <result property="payCount"    column="pay_count"    />
+        <result property="forumCategoryName"    column="category_name"    />
+        <result property="hideType"    column="hide_type"    />
+    </resultMap>
+
+    <sql id="selectForumQuestionVo">
+        select id, yhid, question_region, author, publish_time, title, category_id, tags, hit, comment_flag, up_vote, favourite, create_time, update_time, available, deleted,attachment,download_type,pay_type,pay_count,hide_type from forum_question
+    </sql>
+
+    <select id="selectForumQuestionList" parameterType="ForumQuestion" resultMap="ForumQuestionResult">
+        <include refid="selectForumQuestionVo"/>
+        <where>
+            <if test="id != null"> and id = #{id}</if>
+            <if test="yhid != null  and yhid != ''"> and yhid = #{yhid}</if>
+            <if test="questionRegion != null  and questionRegion != ''"> and question_region = #{questionRegion}</if>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="categoryId != null  and categoryId != ''"> and category_id = #{categoryId}</if>
+            <if test="tags != null  and tags != ''"> and FIND_IN_SET(#{tags},tags)</if>
+            <if test="available != null "> and available = #{available}</if>
+            <if test="deleted != null "> and deleted = #{deleted}</if>
+            <if test="front ==1 "> and available=1</if>
+        </where>
+
+        order by create_time desc
+    </select>
+    
+    <select id="selectForumQuestionById" parameterType="String" resultMap="ForumQuestionResult">
+        <include refid="selectForumQuestionVo"/>
+        where id = #{id}
+    </select>
+    <select id="getQuestionContent" resultType="java.util.Map"  parameterType="java.lang.String">
+        SELECT content,content_markdown_source FROM forum_question_content
+        <where>
+            id=#{id}
+        </where>
+    </select>
+    <insert id="insertForumQuestion" useGeneratedKeys="true"  keyProperty="id" parameterType="ForumQuestion">
+        insert into forum_question
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <!--<if test="id != null and id != '' ">id,</if>-->
+            <if test="yhid != null">yhid,</if>
+            <if test="questionRegion != null">question_region,</if>
+            <if test="author != null">author,</if>
+            <if test="publishTime != null">publish_time,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="categoryId != null and categoryId != ''">category_id,</if>
+            <if test="tags != null">tags,</if>
+            <if test="hit != null">hit,</if>
+            <if test="commentFlag != null">comment_flag,</if>
+            <if test="upVote != null">up_vote,</if>
+            <if test="favourite != null">favourite,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="available != null">available,</if>
+            <if test="deleted != null">deleted,</if>
+
+            <if test="attachment != null">attachment,</if>
+            <if test="downloadType != null">download_type,</if>
+            <if test="payType != null">pay_type,</if>
+            <if test="payCount != null">pay_count,</if>
+            <if test="hideType != null">hide_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <!--<if test="id != null">#{id},</if>-->
+            <if test="yhid != null">#{yhid},</if>
+            <if test="questionRegion != null">#{questionRegion},</if>
+            <if test="author != null">#{author},</if>
+            <if test="publishTime != null">#{publishTime},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="categoryId != null and categoryId != ''">#{categoryId},</if>
+            <if test="tags != null">#{tags},</if>
+            <if test="hit != null">#{hit},</if>
+            <if test="commentFlag != null">#{commentFlag},</if>
+            <if test="upVote != null">#{upVote},</if>
+            <if test="favourite != null">#{favourite},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="available != null">#{available},</if>
+            <if test="deleted != null">#{deleted},</if>
+
+            <if test="attachment != null">#{attachment},</if>
+            <if test="downloadType != null">#{downloadType},</if>
+            <if test="payType != null">#{payType},</if>
+            <if test="payCount != null">#{payCount},</if>
+            <if test="hideType != null">#{hideType},</if>
+         </trim>
+    </insert>
+
+    <insert id="insertQuestionContent"  parameterType="ForumQuestion">
+		insert into forum_question_content(id,content,content_markdown_source)
+		values (#{id},#{content},#{content_markdown_source})
+	</insert>
+
+    <update id="updateForumQuestion" parameterType="ForumQuestion">
+        update forum_question
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="yhid != null">yhid = #{yhid},</if>
+            <if test="questionRegion != null">question_region = #{questionRegion},</if>
+            <if test="author != null">author = #{author},</if>
+            <if test="publishTime != null">publish_time = #{publishTime},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="categoryId != null and categoryId != ''">category_id = #{categoryId},</if>
+            <if test="tags != null">tags = #{tags},</if>
+            <if test="hit != null">hit = #{hit},</if>
+            <if test="commentFlag != null">comment_flag = #{commentFlag},</if>
+            <if test="upVote != null">up_vote = #{upVote},</if>
+            <if test="favourite != null">favourite = #{favourite},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="available != null">available = #{available},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+
+            <if test="attachment != null">attachment = #{attachment},</if>
+            <if test="downloadType != null">download_type = #{downloadType},</if>
+
+            <if test="payType != null">pay_type = #{payType},</if>
+            <if test="payCount != null">pay_count = #{payCount},</if>
+            <if test="hideType != null">hide_type = #{hideType},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <update id="updateQuestionContent" parameterType="ForumQuestion">
+        update forum_question_content
+        <set>
+            <if test="content != null">content=#{content},</if>
+            <if test="content_markdown_source != null">content_markdown_source=#{content_markdown_source},</if>
+        </set>
+        where
+        id =#{id}
+    </update>
+    <delete id="deleteForumQuestionById" parameterType="String">
+        delete from forum_question where id = #{id}
+    </delete>
+
+    <delete id="deleteForumQuestionByIds" parameterType="String">
+        delete from forum_question where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="selectMyFavouriteList" parameterType="ForumQuestion" resultMap="ForumQuestionResult">
+        select id, a.yhid, question_region, author, publish_time, title, category_id, tags, hit, comment_flag, up_vote, favourite, create_time, update_time, available, deleted,attachment,download_type,pay_type,pay_count,hide_type
+        ,b.favourite_time
+        from forum_question a,forum_favourite_question b
+        where a.id=b.question_id and  id in(
+            select question_id from forum_favourite_question where b.yhid  = #{yhid}
+        )
+
+    </select>
+
+
+    <delete id="removeFavourite" parameterType="String">
+        delete from forum_favourite_question where yhid =#{yhid} and question_id=#{question_id}
+    </delete>
+
+
+    <insert id="addFavourite" parameterType="String">
+      insert into forum_favourite_question values (#{yhid},#{question_id},now())
+    </insert>
+
+    <select id="selectFavouriteFlag" parameterType="String" resultType="Integer">
+      select count(1) from forum_favourite_question where yhid=#{yhid} and question_id=#{question_id}
+    </select>
+
+    <update id="upVote" parameterType="java.lang.String">
+        update forum_question set up_vote=up_vote+1 where id=#{id}
+    </update>
+    <update id="questionLook" parameterType="java.lang.String">
+        update forum_question set hit=hit+1 where id=#{id}
+    </update>
+    <update id="setTop" parameterType="java.lang.String">
+        update forum_question set question_region='top' where id=#{id}
+    </update>
+    <update id="setRecommend" parameterType="java.lang.String">
+        update forum_question set question_region='recommend' where id=#{id}
+    </update>
+    <update id="setGood" parameterType="java.lang.String">
+        update forum_question set question_region='good' where id=#{id}
+    </update>
+
+    <select id="selectNew20Question"  resultMap="ForumQuestionResult">
+        <include refid="selectForumQuestionVo"/>
+        <where>
+            1=1
+            and question_region !='top'
+            and available = 1
+            and deleted = 0
+        </where>
+        order by create_time desc limit 20
+    </select>
+    <select id="selectHisQuestions" parameterType="String" resultMap="ForumQuestionResult">
+        select id, yhid, question_region, author, publish_time, title, a.category_id, tags, hit, comment_flag, up_vote, favourite, a.create_time, a.update_time, available, deleted ,attachment,download_type,pay_type,pay_count,hide_type
+        b.category_name
+        from forum_question a LEFT JOIN forum_category b on a.category_id=b.category_id
+
+        where available=1 and deleted=0 and yhid in (
+          select focus_user_id from forum_focus_user where  yhid  = #{yhid}
+        )
+        order by a.create_time desc
+
+    </select>
+
+    <select id="selectQuestionCount" parameterType="String" resultType="Integer">
+        select count(1) from forum_question
+        where yhid = #{userId} and available =1 and deleted=0
+    </select>
+
+
+    <update id="updateAvailable" parameterType="ForumQuestion">
+        update forum_question set available=#{available} where id=#{id}
+    </update>
+
+    <update id="batchPublish" flushCache="true">
+        update forum_question set available=1,publish_time=now() where id in
+        <foreach collection="array" item = "ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+    <select id="questionTagCount" resultType="int"  parameterType="java.lang.String">
+        select count(1) from forum_question
+        where available=1 and deleted=0
+         and FIND_IN_SET(#{tagId},tags)
+    </select>
+
+    <delete id="deleteQuestionContentByIds" parameterType="String">
+        delete from forum_question_content where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

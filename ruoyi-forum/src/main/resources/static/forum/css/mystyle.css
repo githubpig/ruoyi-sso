@@ -1,0 +1,197 @@
+header {
+    width: 100%;
+    height: 56px;
+    background: #00abe9 !important;
+}
+header a {
+    color: #fff;
+    text-decoration: none;
+}
+header li a:hover, header li.current {
+    background: #00a779;
+    color: #fff;
+}
+header ul.unlogin li a{background:#00abe9;}
+header nav .menu-list{background: #00abe9 !important}
+header nav .user-center .unlogin li {
+    line-height: 56px !important;
+}
+header nav .header-menu-bar .menu-box>ul.menu-list-content li:hover {
+    background: #282828;
+    color: #fff !important;
+}
+header nav .search:hover {
+    background: #00a779;
+}
+header nav .user-center>ul .user:hover {
+    background: #00a779;
+}
+header nav .menu-list {
+    background: #00abe9 !important;
+}
+header nav .header-menu-bar .menu-box>ul.menu-list-content li:hover {
+    background:#00a779;
+    color: #fff !important;
+}
+header nav .menu-list p:hover {
+    background: #5fb878 !important
+}
+
+
+header .user-center a {
+    color: #000;
+    text-decoration: none;
+}
+header .user-center li a:hover, header .user-center li.current, header .user-center p.current {
+    background: #00abe9;
+    color: #fff;
+}
+
+header nav .menu-list p.works-manange:hover {
+    background: #00abe9 !important;
+}
+
+
+
+.searchbox {
+    width: 1167px;
+    margin: 10px auto;
+    overflow: hidden;
+    background: #ffffff;
+    position: relative;
+}
+.open {
+    display: block !important;
+}
+.search {
+    width: 50%;
+    margin: 20px auto;
+    background: #00abe9;
+    position: relative;
+    border: #ccc 1px solid;
+    display: block;
+}
+.search input.input_text {
+    border: 0;
+    line-height: 36px;
+    height: 36px;
+    width: 72%;
+    padding-left: 10px;
+    outline: none;
+}
+.search input.input_submit {
+    border: 0;
+    background: 0;
+    color: #000;
+    outline: none;
+    position: absolute;
+    top: 10px;
+    right: 10%;
+}
+.searchclose {
+    background: url(/forum/images/close.png) no-repeat;
+    display: block;
+    position: absolute;
+    width: 28px;
+    height: 30px;
+    right: 5px;
+    top: 5px;
+}
+.clear{clear:both;}
+
+.personal-menu .menu-list li:hover {
+    background: #00abe9;
+}
+.personal-menu .menu-list .menu-list-default.current i {
+    background: #00abe9 !important;
+}
+.btn-default-main {
+    color: #444;
+    background: #00abe9;
+    border: 1px solid #00abe9;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.btn-default-main:hover {
+    color: #444;
+    background: #09a7e0;
+    border: 1px solid #09a7e0;
+}
+
+.recommend-works {
+    background-color: #00abe9;
+}
+.recommend-box .normal:hover {
+    background: #09a7e0;
+    border: 1px solid #09a7e0;
+}
+.main-bg-color {
+    background: #00abe9;
+    color: #333333;
+}
+.container-area-left .current span {
+    border-right: 3px solid #09a7e0 !important;
+}
+
+
+.cloud ul a { line-height: 24px; height: 24px; display: block; /*background: #999;*/ float: left; padding: 3px 10px; margin: 10px 5px 0 0; border-radius: 3px; -moz-transition: all 0.5s; -webkit-transition: all 0.5s; -o-transition: all 0.5s; transition: all 0.5s; color: #FFF }
+.cloud ul a:nth-child(8n-7) { color: #00a779 }
+.cloud ul a:nth-child(8n-6) { color: #01b01e }
+.cloud ul a:nth-child(8n-5) { color: #00a4ae }
+.cloud ul a:nth-child(8n-4) { color: #9a2bc3 }
+.cloud ul a:nth-child(8n-3) { color: #fc2d50 }
+.cloud ul a:nth-child(8n-2) { color: #0caffb }
+.cloud ul a:nth-child(8n-1) { color: #399d01 }
+.cloud ul a:nth-child(8n) { color: #909501 }
+.cloud ul a:first-child { color: #ff610b}
+.cloud ul a:last-child { color: #9a2bc3 }
+.cloud ul a:hover {     text-decoration: underline;}
+
+
+.hideTagType  {
+    border-radius: 12px;
+    display: inline-block;
+    margin-right: 5px;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    margin-left: 6px;
+    top: -4px;
+}
+.hide_0  {
+    background: #ebebeb;
+}
+.hide_0  i {
+    color: #b2b2b2;
+}
+.hide_1  {
+    background: #bbf9d5;
+}
+.hide_1  i {
+    color: #21de70;
+}
+.hide_2  {
+    background: #bfebfb;
+}
+.hide_2  i {
+    color: #27c3fc;
+}
+.hide_3  {
+    background: #e2cffe;
+}
+.hide_3  i {
+    color: #af82f2;
+}
+.hide_4  {
+    background: #fedbb2;
+}
+.hide_4  i {
+    color: #fe9d2d;
+}
+.hideTagType  i {
+    line-height: 24px;
+    left: 6px;
+    position: relative;
+    top: 0px;
+}
+

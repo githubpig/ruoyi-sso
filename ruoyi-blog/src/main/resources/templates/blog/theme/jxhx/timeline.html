@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" th:content="${@config.getKey('blog.index.keywords')}">
+	<meta name="description" th:content="${@config.getKey('blog.index.description')}">
+	<title th:text="${@config.getKey('blog.index.title')}"></title>
+
+	<link rel="stylesheet" th:href="@{/blog/jxhx/css/base.css}" />
+	<link rel="stylesheet" th:href="@{/blog/jxhx/css/m.css}" />
+	<link rel="stylesheet" th:href="@{/ajax/libs/font-icon/icon.css}"/>
+	<script th:src="@{/blog/jxhx/js/jquery-1.8.3.min.js}"></script>
+	<script th:src="@{/blog/jxhx/js/comm.js}"></script>
+	<script th:inline="javascript"> var ctx = [[@{/}]]; </script>
+
+
+</head>
+<body>
+<div th:replace="blog/theme/jxhx/fragments/navbar"></div>
+
+<article>
+	<div class="whitebg timebox">
+		<h2 class="htitle">往期文章</h2>
+		<ul id="list" >
+			<li th:each="item:${articleList}"><span th:text="${#dates.format(item.createTime,'yyyy-MM-dd')}"></span>
+				<i><a th:href="${'/blog/article/'+item.id}"  target="_blank" th:text="${item.title}"  th:title="${item.title}"></a></i>
+			</li>
+		</ul>
+
+		<div class="clear"></div>
+
+		<div id="pageGroup">
+			<span class="pageinfo">共<strong>[[${totalPages}]]</strong>页<strong>[[${total}]]</strong>条记录</span>
+			<a th:href="@{'/blog/timeline?pageSize=20'}" class="homepage">首页</a>
+			<a th:if="${hasPrevious}" th:href="@{'/blog/timeline?pageNum='+${prePage}+'&pageSize=20'}"  class="prepage">上页</a>
+			<a  th:each="item:${navNums}" class="listpage"  th:href="@{'/blog/timeline?pageNum='+${item}+'&pageSize=20'}"  th:text="${item}" th:classappend="${item+'' ==currentPage+'' ? 'curpage':''}"></a>
+			<a th:if="${hasNext}" th:href="@{'/blog/timeline/?pageNum='+${nextPage}+'&pageSize=20'}"  class="nextpage">下页</a>
+			<a th:href="@{'/blog/timeline?pageNum='+${totalPages}+'&pageSize=20'}"  class="endpage">尾页</a>
+		</div>
+
+	</div>
+</article>
+<div th:replace="blog/theme/jxhx/fragments/footer"></div>
+
+<script>
+    /*加载底部前执行。ps：防止闪现
+     控制当页面内容过少时，底部仍在屏幕最下方
+     主体内容最小高度
+     */
+    var topHeight=160;//头部高度
+    var footerHeight=191;//底部高度
+    var contentMinHeight = $(window).height()-topHeight-footerHeight;
+    $(".timebox").css("min-height",contentMinHeight)
+    $(window).resize(function(){
+        var contentMinHeight = $(window).height()-topHeight-footerHeight;
+        $(".rightGrid").css("min-height",contentMinHeight)
+    })
+</script>
+
+</body>
+
+</html>

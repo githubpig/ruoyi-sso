@@ -1,0 +1,16 @@
+ third:
+    login:
+      #引导授权用户绑定本平台用户的url，如果为空，自动创建绑定用户
+      to_bind_url:
+      gitee:
+        authorize_url: https://gitee.com/oauth/authorize?client_id=[client_id]&redirect_uri=[redirect_uri]&response_type=code&scope=[scope]
+        client_id: d6f19be193c9d469c12a2667492936c6e770c622cfcbb379b19b6d37933dfe12
+        client_secret: fd0e687ac16bb4b0d84e069ecde66e66bf7fe2e2c571c234477b551a930e0a7c
+        redirect_uri: /thirdLogin/gitee/callback?redirect=/index
+        scope: user_info
+      qq:
+        authorize_url: https://graph.qq.com/oauth2.0/authorize?client_id=[client_id]&redirect_uri=[redirect_uri]&response_type=code&scope=[scope]
+        client_id: 1103445190
+        client_secret: ovWqr550ex06pTGH
+        redirect_uri: /thirdLogin/qq/callback?redirect=/index
+        scope: user_info

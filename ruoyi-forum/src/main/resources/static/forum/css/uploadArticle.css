@@ -1,0 +1,73 @@
+@charset "UTF-8";
+/*-- 页面辅助文字 --*/
+/*-- 页面辅助文字 --*/
+/* -- 按钮 -- */
+/*-- 文本截取，超出一行行加省略号 --*/
+/*-- 文本截取，超出两行加省略号 --*/
+/*-- 圆角 --*/
+/*-- inline-block --*/
+/*-- 透明度 --*/
+/*-- 一级下拉菜单样式 --*/
+/*-- 导航下拉菜单原始样式 --*/
+/*-- 导航下拉菜单hover样式 --*/
+/*-- new标记 --*/
+/*-- 分隔符 --*/
+/*-- 按钮通用 --*/
+/*-- 卡片透明度 --*/
+/*-- 小三角朝下投影效果 --*/
+.article-edit-wrap .redwarn { margin-top: 19px; }
+
+.select-position-box ul li { padding: 0; }
+
+.select-position-box label { display: block; padding: 13px 30px; }
+
+.select-position-box .check-c, .select-position-box .check-cd { background-position: 30px center; }
+
+.select-position-box .trade-tips { margin-bottom: 6px; display: block; text-align: center; }
+
+.link-error-box { display: inline-block; width: 16px; }
+
+.link-error-box .hide { display: none; }
+
+.wrapper .article .progress { width: 260px; height: 6px; margin-left: 17px; margin-right: 7px; background: #eeeeee; display: inline-block; vertical-align: middle; *vertical-align: auto; zoom: 1; *display: inline; border-radius: 10px; overflow: hidden; }
+
+.wrapper .article .progress .filling-progress { width: 80%; height: 6px; background: #ffe300; display: block; border-radius: 10px; }
+
+.wrapper .article .select-con .select-option-label { width: 172px; }
+
+.wrapper .article .select-con .select-confrim { width: 100%; height: 36px; }
+
+.wrapper .article .select-con .select-option-checkbox .label { width: 100%; }
+
+.wrapper .article .work-selectbox > ul > li .select-position-box { width: 160px; padding-top: 15px; background: #ffffff; }
+
+.wrapper .article .work-selectbox > ul > li .select-position-box .territory-btn { padding: 20px; }
+
+.wrapper .article .work-discriptionbox { position: relative; }
+
+.wrapper .article .work-discriptionbox .focus-height { height: 56px; }
+
+.edit-bd { padding-left: 20px; width: 820px; }
+
+.ueditor-error { margin-left: 30px; }
+
+.ueditor-error .error-icon { margin-top: -2px; }
+
+@media screen and (max-width: 1600px) { .wrapper { width: 1130px; }
+    .wrapper .left-sidebar { width: 210px; }
+    .wrapper .article { width: 900px; }
+    .wrapper .article .article-selectbox > ul > li.item-rowpitch { margin-right: 170px; }
+    .wrapper .article .worktext-lbox { width: 698px; } }
+
+@media screen and (min-width: 1601px) { .wrapper { width: 1380px; }
+    .wrapper .left-sidebar { width: 260px; }
+    .wrapper .article { width: 1100px; }
+    .wrapper .article .worktext-lbox { width: 900px; }
+    /*.edit-bd { width: 900px; }*/
+    .wrapper .article .more-settings .settings-con > ul > li .now-equipment { width: 690px !important; } }
+
+.edui-default .edui-toolbar .edui-combox.edui-for-fontsize { margin-left: 15px; }
+
+.edui-default .edui-toolbar .edui-button.edui-for-bold, .edui-default .edui-toolbar .edui-button.edui-for-justifyleft, .edui-default .edui-toolbar .edui-button.edui-for-link, .edui-default .edui-toolbar .edui-button.edui-for-undo, .edui-default .edui-toolbar .edui-menubutton.edui-for-insertorderedlist { margin-left: 15px; }
+
+#edui1_message_holder { display: none; }

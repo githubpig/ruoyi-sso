@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>我的关注</title>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
+    <link rel="stylesheet" href="/forum/css/main.min.css">
+    <link rel="bookmark" type="image/x-icon" href="forum/images/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/forum/images/favicon.ico">
+
+
+    <link rel="stylesheet" href="/forum/css/personalProfile.css">
+    <link rel="stylesheet" href="/forum/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="/forum/css/mystyle.css">
+    <script type="text/javascript" src="/forum/lib/jquery.min.js"></script>
+    <style>
+        .laypage_main a{width:auto;}
+    </style>
+</head>
+<body>
+<div id="body">
+
+    <div th:replace="forum/header"></div>
+    <!--*******************************-->
+    <main class="main-wrapper">
+        <div class="container-area">
+            <div class="container-area-left">
+                <div class="card-media personal-card">
+                    <div class="avatar-container-80 z-center">
+                        <a th:href="@{'/forum/u/'+${userId}}" th:title="${userName}" class="author-avatar" target="_blank" z-st="user_card_1_face">
+                            <img th:src="${avatar}" width="80" height="80" th:title="${userName}" alt="">
+                        </a>
+
+                    </div>
+                    <div class="presonal-info">
+                        <a th:href="@{'/forum/u/'+${userId}}" class="author-name" target="_blank"
+                           th:title="${userName}" z-st="user_card_1_name" th:text="${userName}"></a>
+                    </div>
+                    <div class="position-info">
+                            <!--<span title="淄博 | 手工艺人">xx&nbsp;|
+                              xxxx
+                            </span>-->
+                    </div>
+                    <div class="btn-area">
+                        <a href="/uploadQuestion"  class="btn-default-main card-media-mid-btn js-upload">发 帖</a><br />
+                        <!--<a href="https://contributor.hellorf.com/" target="_blank" class="btn-default-secondary card-media-mid-btn mt-10">帮你的创作变现</a>-->
+                    </div>
+
+                </div>
+                <div class="card-media personal-menu">
+
+                    <ul class="menu-list">
+                        <li class="menu-list-default ">
+                            <i></i><a href="/setting" id="left-data-account-focus">资料与账号</a></li>
+                    </ul>
+
+                    <ul class="menu-list">
+                        <li class="menu-list-default "><i></i>
+                            <a href="/myQuestion" id="usercenter-menu-focus-left">我的帖子
+                            </a>
+                        </li>
+                        <li class="menu-list-default  current">
+                            <i></i><a href="/myFocus">我的关注</a></li>
+                        <li class="menu-list-default ">
+                            <i></i><a href="/myFavourite">我的收藏</a></li>
+                    </ul>
+                    <ul class="menu-list">
+
+                        <li class="menu-list-default ">
+                            <i></i><a href="/myIn" >财务中心</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="container-area-right">
+                <div class="bg-box-radius">
+
+                    <div class="tab-menu border-bottom">
+                        <ul class="tab-box">
+                            <li  class="current" ><a>我的关注</a></li>
+                            <li><a  href="/hisQuestions">Ta的动态</a></li>
+                            <li><a href="/myFans">我的粉丝</a></li>
+                        </ul>
+                    </div>
+
+
+                    <div class="datum-item-box border-bottom">
+                        <table class="layui-table" lay-skin="line">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="15%">
+                                <col width="15%">
+                                <col width="15%">
+                                <col width="10%">
+                                <col width="20%">
+                                <col width="15%">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>用户ID</th>
+                                <th>头像</th>
+                                <th>用户名</th>
+                                <th>性别</th>
+                                <th>积分</th>
+                                <th>上次登录时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="myList">
+
+                            </tbody>
+                        </table>
+                        <div style="position:relative;bottom:0px;text-align: center;" id="pagebar" class="pagebar"></div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </main>
+    <div th:replace="forum/footer"></div>
+</div>
+
+<script type="text/javascript" src="/forum/js/common.js"></script>
+<script  th:src="@{/ruoyi/js/ry-ui.js}"></script>
+<script th:inline="javascript"> var ctx = [[@{/}]];</script>
+<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+<script th:src="@{/ruoyi/js/fast.js}"></script>
+<script th:src="@{/ajax/libs/laypage/laypage.js}"></script>
+
+<script>
+    $(function () {
+        initMyFocusList(1);
+    })
+    function initMyFocusList(pageNum){
+
+        $.ajax({
+            type: "post",
+            url: ctx+"forumQuestion/myFocusList",
+            data:  {"pageNum":pageNum},
+            xhrFields: {
+                withCredentials: true
+            },
+            dataType: "json",
+            success: function(data) {
+
+                if(data.code==0){
+                    if(data.total>0){
+                        var rows=data.rows;
+                        var html='';
+                        $.each(rows,function(index,row){
+
+                            html+="<tr>";
+                            html+="<td>"+row.userId+"</td>";
+                            html+='<td><img src="'+row.avatar+'" style="width: 40px;height: 40px;border-radius:20px; display: inline-block;"></td>';
+                            html+="<td>"+row.userName+"</td>";
+                            if(row.sex==0||row.sex=='0'){
+                                html+="<td>女</td>";
+                             }
+                            else{
+                                html+="<td>男</td>";
+                            }
+                            html+="<td>"+row.score+"</td>";
+                            html+="<td>"+row.loginDate+"</td>";
+
+                            html+='<td><a href="javascript:;" data-id="'+row.userId+'" onclick="cancleFocus(this)" class="layui-btn layui-btn-xs layui-btn-danger">取消关注</a></td>';
+
+                            html+="</tr>";
+
+                        });
+                        $("#myList").html("");
+                        $("#myList").append(html);
+                        var totalPage = (data.total + 10 -1) / 10;
+                        initPager(totalPage,pageNum);
+                    }else{
+                        $("#myList").html("<tr><td colspan=\"7\"   style='text-align: center'>暂无关注记录!</td></tr>");
+                    }
+
+                }
+            }
+        })
+    }
+
+    function initPager(totalPages,pageNum) {
+        var $pagebar = $("#pagebar");
+        laypage({
+            cont: $pagebar, //容器。值支持id名、原生dom对象，jquery对象,
+            pages: totalPages, //总页数
+            curr: pageNum,
+            jump:jumpPage,
+            skin: '#1E9FFF',
+            first: '首页', //若不显示，设置false即可
+            last: '尾页', //若不显示，设置false即可
+            prev: '上一页', //若不显示，设置false即可
+            next: '下一页' //若不显示，设置false即可
+        });
+    }
+
+    function jumpPage(obj,first){
+        pageNo=obj.curr;
+        if(!first){
+            initMyFocusList(pageNo);
+        }
+    }
+
+
+    function cancleFocus(obj){
+
+        Fast.confirm("确定要取消关注吗？",function(){
+
+            var id=$(obj).data("id");
+            $.ajax({
+                type: "post",
+                url: ctx+"forumQuestion/removeFocus/"+id,
+                data: null,
+                xhrFields: {
+                    withCredentials: true
+                },
+                dataType: "json",
+                success: function(data) {
+                    if(data.code==0){
+                        Fast.msg_success("取消关注成功!");
+                        initMyFocusList(1);
+                    }else{
+                        Fast.msg_error(data.msg)
+                    }
+                }
+            })
+
+        },function(){});
+
+    }
+
+</script>
+</body>
+</html>

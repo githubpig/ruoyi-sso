@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('问题列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>文章ID：</label>
+                                <input type="text" name="id" style="width: 100px;"/>
+                            </li>
+
+                            <li>
+                                <label>专区：</label>
+                                <select name="questionRegion" th:with="type=${@dict.getType('forum_question_region')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>标题：</label>
+                                <input type="text" name="title"/>
+                            </li>
+                            <li>
+                                <label>栏目：</label>
+
+                                <div class="input-group1" style="display: inline-block">
+                                   <!-- <input id="treeId" name="categoryId" type="hidden"/>
+                                    <input class="form-control" placeholder="请选择栏目" type="text" onclick="selectCategoryTree()" id="treeName" readonly="true">-->
+
+                                    <input id="categoryId" name="categoryId" type="hidden" />
+
+                                    <select onchange="categoryChange()" id="categoryName"  class="dropdown" style="display: inline-block;z-index: 99999999999999" data-settings='{"wrapperClass":"flat"}'>
+                                        <option value="" >-请选择栏目-</option>
+                                        <option th:each="item,temp:${@forum.selectNavCategoriesAll()}"    th:value="${item.categoryId}"  th:text="${item.categoryName}"></option>
+                                    </select>
+
+                                </div>
+                            </li>
+
+                            <li>
+                                <label>状态：</label>
+                                <select name="available" th:with="type=${@dict.getType('sys_available_status')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="forum:question:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.editTab()" shiro:hasPermission="forum:question:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="forum:question:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a onclick="batchPublish()" class="btn btn-outline btn-danger"><i class="fa fa-upload"></i>&nbsp;批量审核</a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('forum:question:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('forum:question:remove')}]];
+        var questionRegionDatas = [[${@dict.getType('forum_question_region')}]];
+        var availableDatas = [[${@dict.getType('sys_available_status')}]];
+
+        var prefix = ctx + "forum/question";
+
+        $(function() {
+            initList();
+        });
+        function initList(){
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "问题",
+                columns: [{
+                    checkbox: true
+                },
+                    {
+                        field: 'id',
+                        title: '文章ID'/*,
+                            visible: false*/
+                    },
+                    {
+                        field: 'questionRegion',
+                        title: '专区',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(questionRegionDatas, value);
+                        }
+                    },
+                    {
+                        field: 'title',
+                        title: '标题',
+                        formatter: function(value, row) {
+                            return '<a target="_blank" href="/forum/question/questionDetail/'+row.id+'">'+value+'</a>';
+                        }
+                    },
+                    {
+                        field: 'categoryId',
+                        title: '频道栏目ID',visible:false
+                    },
+                    {
+                        field: 'forumCategoryName',
+                        title: '栏目'
+                    },
+                    {
+                        field: 'tags',
+                        title: '标签',visible:false
+                    },
+                    {
+                        field: 'commentFlag',
+                        title: '是否开启评论',
+                        formatter: function(v, row, index) {
+                            if(v==1||v=='1'){
+                                return "<font color='green'>开启评论</font>";
+                            }else{
+                                return "<font color='red'>关闭评论</font>";
+                            }
+                        }
+                    },
+                    {
+                        field: 'available',
+                        title: '状态',
+                        formatter: function(v, row, index) {
+                            //return $.table.selectDictLabel(availableDatas, value);
+                            if(v==1||v=='1'){
+                                return "<font color='green'>已审核</font>";
+                            }else if(v==0||v=='0'){
+                                return "<font color='gray'>草稿</font>";
+                            }else{
+                                return "<font color='red'>未通过</font>";
+                            }
+                        }
+                    },
+                    {
+                        title: '操作',
+                        align: 'center',
+                        formatter: function(value, row, index) {
+                            var actions = [];
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                            var more = [];
+                            more.push("<a class='btn btn-default btn-xs ' href='javascript:void(0)' onclick='setTop(" + row.id+'' + ")'><i class='fa fa-play-circle-o'></i> 置顶</a> ");
+                            more.push("<a class='btn btn-default btn-xs ' href='javascript:void(0)' onclick='setGood(" + row.id + ")'><i class='fa fa-search'></i>精品</a> ");
+                            more.push("<a class='btn btn-default btn-xs ' href='javascript:void(0)' onclick='setRecommend(" + row.id + ")'><i class='fa fa-list'></i>推荐</a>");
+                            actions.push('<a class="btn btn-info btn-xs" role="button" data-container="body" data-placement="left" data-toggle="popover" data-html="true" data-trigger="hover" data-content="' + more.join('') + '"><i class="fa fa-chevron-circle-right"></i>更多操作</a>');
+
+                            return actions.join('');
+                        }
+                    }]
+            };
+            $.table.init(options);
+        }
+        /*栏目分类选择*/
+        function selectCategoryTree() {
+            var prefixTemp = ctx + "forum/category"
+            var options = {
+                title: '栏目分类选择',
+                width: "380",
+                url: prefixTemp + "/selectCategoryTree/" + $("#treeId").val(),
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+        function doSubmit(index, layero){
+            var body = layer.getChildFrame('body', index);
+            $("#treeId").val(body.find('#treeId').val());
+            $("#treeName").val(body.find('#treeName').val());
+            layer.close(index);
+        }
+        function reset(){
+            $.form.reset();
+            $("#categoryId").val("");
+        }
+
+        function categoryChange(){
+            var v=$("#categoryName").val();
+            $("#categoryId").val(v);
+        }
+
+        function setTop(v){
+            v=v+'';
+
+            Fast.confirm("确定要置顶该帖子吗？",function(){
+
+                $.ajax({
+                    type: "post",
+                    url: ctx+"forumQuestion/setTop/"+v,
+                    data: null,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if(data.code==0){
+                            Fast.msg_success(data.msg);
+                            setTimeout(function(){$.table.search();},500)
+                        }else{
+                            Fast.msg_error(data.msg)
+                        }
+                    }
+                })
+
+            },function(){});
+
+        }
+        function setRecommend(v){
+
+            Fast.confirm("确定要将该帖子置为推荐吗？",function(){
+
+                $.ajax({
+                    type: "post",
+                    url: ctx+"forumQuestion/setRecommend/"+v,
+                    data: null,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if(data.code==0){
+                            Fast.msg_success(data.msg);
+                            setTimeout(function(){$.table.search();},500)
+                        }else{
+                            Fast.msg_error(data.msg)
+                        }
+                    }
+                })
+
+            },function(){});
+
+        }
+        function setGood(v){
+
+            Fast.confirm("确定要将该帖子置为精品吗？",function(){
+
+                $.ajax({
+                    type: "post",
+                    url: ctx+"forumQuestion/setGood/"+v,
+                    data: null,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if(data.code==0){
+                            Fast.msg_success(data.msg);
+                            setTimeout(function(){$.table.search();},500)
+                        }else{
+                            Fast.msg_error(data.msg)
+                        }
+                    }
+                })
+
+            },function(){});
+
+        }
+
+
+        var batchPublish=function(){
+            var selecRow = $("#bootstrap-table").bootstrapTable('getSelections');
+            if(selecRow.length > 0){
+                Fast.confirm("确定批量审核帖子吗？", function(){
+                    var ids = new Array();
+                    for(var i=0;i<selecRow.length;i++){
+                        ids[ids.length] = selecRow[i]["id"]
+                    }
+                    $.ajax({
+                        type:"post",
+                        url:ctx+'forum/question/batchPublish/'+ids,
+                        data:null,
+                        success:function(data,textStatus){
+                            Fast.msg_success(data.msg);
+                            $.table.search();
+                        }
+                    });
+                });
+            }else{
+                Fast.msg_warning("请选择要审核的帖子!");
+            }
+        }
+
+    </script>
+</body>
+</html>

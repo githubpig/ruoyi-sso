@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改问题')" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-question-edit" th:object="${forumQuestion}">
+        <input name="id" th:field="*{id}" type="hidden">
+
+        <h4 class="form-header h4">基本信息</h4>
+        <!--<div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">专区：</label>
+                    <div class="col-xs-10">
+                        <div class="radio-box" th:each="dict : ${@dict.getType('forum_question_region')}">
+                            <input type="radio" th:id="${'questionRegion_' + dict.dictCode}" name="questionRegion" th:value="${dict.dictValue}" th:field="*{questionRegion}">
+                            <label th:for="${'questionRegion_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>-->
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label is-required">标题：</label>
+                    <div class="col-xs-10">
+                        <input name="title" class="form-control" th:field="*{title}"  type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label is-required">栏目：</label>
+                    <div class="col-xs-10">
+                        <div class="input-group">
+                            <!--<input id="treeId" name="categoryId" type="hidden" th:value="${forumQuestion.forumCategory?.categoryId}"/>
+                            <input class="form-control" type="text" onclick="selectCategoryTree()" id="treeName" readonly="true" th:value="${forumQuestion.forumCategory?.categoryName}">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>-->
+                            <input id="categoryId" name="categoryId" type="hidden" th:value="${forumQuestion.forumCategory?.categoryId}"/>
+
+                            <select onchange="categoryChange()" id="categoryName"  class="form-control " style="display: inline-block;z-index: 99999999999999" data-settings='{"wrapperClass":"flat"}'>
+                                <option value="" >-请选择栏目-</option>
+                                <option th:each="item,temp:${@forum.selectNavCategoriesAll()}" th:selected="${item.categoryId==forumQuestion.forumCategory.categoryId}"   th:value="${item.categoryId}"  th:text="${item.categoryName}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">标签：</label>
+                    <div class="col-xs-10">
+                        <select id="tags" name="tags"  class="form-control select2-multiple" multiple>
+                            <option th:each="tag:${tags}" th:value="${tag.tagId}" th:text="${tag.tagName}" th:selected="${tag.selected}"  th:disabled="${tag.status == '1'}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">开启评论：</label>
+                    <div class="col-xs-10">
+                        <label class="toggle-switch switch-solid">
+                            <input type="checkbox" id="commentFlag" name="commentFlag" th:checked="${forumQuestion.commentFlag==1 || forumQuestion.commentFlag=='1'}">
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">状态：</label>
+                    <div class="col-xs-10">
+                        <div class="radio-box" th:each="dict : ${@dict.getType('sys_available_status')}">
+                            <input type="radio" th:id="${'available_' + dict.dictCode}" name="available" th:value="${dict.dictValue}" th:checked="${dict.default}" th:field="*{available}">
+                            <label th:for="${'available_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h4 class="form-header h4">内容</h4>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">内容:</label>
+                    <div class="col-xs-10">
+                        <script id="editor" name="content" type="text/plain" ></script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <textarea hidden="text" id="divdata">[[*{content}]]</textarea>
+
+        <h4 class="form-header h4">操作</h4>
+        <div class="row">
+            <div class="col-xs-offset-2 col-xs-10">
+                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
+                <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: select2-js" />
+<th:block th:include="include :: ueditor" />
+
+<script th:inline="javascript">
+    var prefix = ctx + "forum/question"
+    $("#form-question-edit").validate({
+        focusCleanup: true
+    });
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-question-edit').serialize());
+        }
+    }
+
+    /*栏目分类选择*/
+    function selectCategoryTree() {
+        var prefixTemp = ctx + "cms/category"
+        var options = {
+            title: '栏目分类选择',
+            width: "380",
+            url: prefixTemp + "/selectCategoryTree/" + $("#treeId").val(),
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSubmit(index, layero){
+        var body = layer.getChildFrame('body', index);
+        $("#treeId").val(body.find('#treeId').val());
+        $("#treeName").val(body.find('#treeName').val());
+        layer.close(index);
+    }
+    var ue = UE.getEditor('editor');
+    function getContent() {
+        return UE.getEditor('editor').getContent();
+    }
+    function getContentTxt() {
+        return UE.getEditor('editor').getContentTxt();
+    }
+    function categoryChange(){
+        var v=$("#categoryName").val();
+        $("#categoryId").val(v);
+    }
+    $(function(){
+        $("#editor").css("height","380px");
+        $('#tags').select2({
+            placeholder:"请选择标签",
+            allowClear: true
+        });
+
+        //给UEeditor赋值
+        var data=$("#divdata").text();
+        var ue = UE.getEditor('editor');
+        var proinfo=$("#divdata").text();
+        ue.ready(function() {//编辑器初始化完成再赋值
+            ue.setContent(data);  //赋值给UEditor
+        });
+        
+    });
+</script>
+</body>
+</html>

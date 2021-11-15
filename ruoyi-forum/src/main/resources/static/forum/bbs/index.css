@@ -1,0 +1,107 @@
+@charset "utf-8";
+.yzm_main{margin: 15px auto}
+.yzm_main_left{float: left; width: 810px}
+.yzm_main_right{float: right; width: 350px}
+.yzm_list_section{margin-bottom: 15px; padding-bottom: 15px; border-radius: 2px; background-color: #fff; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05)}
+.yzm_list_section strong{font-weight: 400; height: 50px; line-height: 50px; padding: 0 15px; border-bottom: 1px dotted #E9E9E9; color: #333; display: block}
+.yzm_list li{padding-left: 15px; height: 45px; line-height: 22px; padding: 15px 15px 15px 75px; border-bottom: 1px dotted #e2e2e2; position: relative}
+.yzm_list li:last-child{border-bottom: none; padding-bottom: 0}
+.yzm_avatar{position: absolute; left: 15px; top: 15px}
+.yzm_avatar img{width: 45px; height: 45px; margin: 0; border-radius: 2px}
+.yzm_list h3{height: 26px; font-weight: 400}
+.yzm_badge{height: 16px; line-height: 16px; padding: 0 5px; font-size: 12px; border: 1px solid #5FB878; background: 0 0; color: #5FB878; border-radius: 2px; position: relative; top: -7px}
+.yzm_list h3 a{font-size: 16px; margin-left: 10px; display: inline-block; max-width: 75%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
+.yzm_list_badge{position: absolute; right: 15px; top: 20px}
+.yzm_time{margin-left: 15px}
+.yzm_list_nums{position: absolute; right: 15px; top: 40px; font-size: 13px; color: #999}
+.yzm_list_nums span{margin-left: 8px}
+.yzm_list_nums span img{height: 13px; margin-right: 3px; vertical-align: middle}
+.yzm_list_info{color: #999}
+.yzm_list_info a cite{font-style: normal; color: #999}
+.yzm_stick{border-radius: 2px; font-size: 12px; background: red; color: #fff; height: 20px; line-height: 20px; border: none; padding: 2px 6px}
+.yzm_essence{border-radius: 2px; font-size: 12px; background: #FF5722; color: #fff; height: 20px; line-height: 20px; border: none; padding: 2px 6px}
+.yzm_recomm{border-radius: 2px; font-size: 12px; background: #5FB878; color: #fff; height: 20px; line-height: 20px; border: none; padding: 2px 6px}
+.yzm_v{height: 13px}
+.yzm_release a{background: #5FB878; display: block; text-align: center; color: #fff; width: 80%; margin: 0 auto; height: 50px; line-height: 50px; font-size: 16px; transition: all .2s}
+.yzm_release a:hover{opacity: .9}
+.yzm_lately{padding-left: 15px}
+.yzm_lately dd{position: relative; width: 65px; height: 90px; margin: 10px 12px 5px 0; display: inline-block; vertical-align: top; font-size: 12px}
+.yzm_lately dd a img{width: 65px; height: 65px; border-radius: 2px}
+.yzm_lately dd a cite{position: absolute; bottom: 25px; left: 0; width: 100%; height: 20px; line-height: 20px; text-align: center; background-color: rgba(0, 0, 0, .2); color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-style: normal}
+.yzm_lately dd a i{position: absolute; bottom: 0; left: 0; width: 100%; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-style: normal; font-size: 12px}
+.yzm_link,
+.yzm_recommend{width: 90%; margin: 8px auto; overflow: hidden}
+.yzm_recommend li a{width: 100%; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
+.yzm_link li{float: left; margin-right: 15px}
+.yzm_conent_box{margin-bottom: 15px; padding: 15px 15px 25px 15px; border-radius: 2px; background-color: #fff; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05)}
+.yzm_conent_box h1{font-size: 24px; line-height: 36px; margin-top: 5px; font-weight: 400}
+.yzm_status{margin-top: 10px}
+.yzm_detail_info{height: 35px; margin: 10px 0 10px; color: #666; border-bottom: 1px dotted #E9E9E9}
+.yzm_detail_info span{display: inline-block; margin-right: 20px}
+.yzm_content{font-size: 16px; color: #323232}
+.yzm_content a{color: #01aaed}
+.yzm_content a:hover{color: #5fb878}
+.yzm_content img{margin: 10px 0; max-width: 100%; cursor: zoom-in}
+.yzm_content pre{color: #444; font-family: Monaco, Menlo, Consolas, "Courier New", monospace; display: block; margin: 10px 0; padding: 9px; border: 1px solid #ccc; border: 1px solid rgba(0, 0, 0, .15); border-radius: 3px; background-color: #f5f5f5; white-space: pre-wrap; word-wrap: break-word; font-size: 11px; line-height: 20px; word-break: break-all}
+.yzm_content h2{font-size: 18px; line-height: 32px; font-weight: 400; border-left: 4px solid #428BCA; background: #f2f2f2; padding: 10px 5px; margin-bottom: 5px}
+.yzm_content h3{font-size:14px;margin-bottom:10px;color:#111;}
+.yzm_content p{word-break:break-all;}
+.yzm_content ol{margin-top:10px}
+.yzm_content ol li{margin-left:20px}
+.yzm_content em{font-style:normal}
+.yzm_content_fieldset{text-align: center; margin: 10px 0 20px; border-width: 1px 0 0; border-style: solid; border-color: #e6e6e6}
+.yzm_content_fieldset legend{font-size: 20px; padding: 0 10px}
+.yzm_content_comment textarea{width: 98%; height: 120px; padding: 1% 1%; border: 1px solid #dadada; margin-bottom: 10px}
+.yzm_operation{border-top: 1px dotted #E9E9E9; margin-top: 10px; padding-top: 10px}
+.yzm_operation a{margin-top: 10px; margin-right: 15px; padding: 3px 12px; background: #009688; color: #fff; font-size: 12px}
+.yzm_operation a:hover{background: #32aa9e}
+.yzm_comment_ul li{padding: 15px 0; border-bottom: 1px dotted #e2e2e2}
+.yzm_comment_ul li .yzm_comment_avatar{float: left; margin-right: 10px}
+.yzm_comment_ul li .yzm_comment_avatar img{height: 45px; width: 45px}
+.yzm_comment_ul li .yzm_detail_user a{color: #01aaed}
+.yzm_comment_ul li .yzm_detail_user a:hover{color: #5fb878}
+.yzm_comment_ul li cite{font-style: normal}
+.yzm_comment_ul .yzm_comment_date{height: 20px; line-height: 20px; color: #999; display: block}
+.yzm_cc{margin-top: 10px; color: #353535}
+.yzm_cc_reply{overflow: hidden}
+.yzm_cc_reply img{float: left; height: 22px; margin-right: 5px}
+.yzm_cc_reply span{cursor: pointer}
+.yzm_cc_reply span:hover{color: #000}
+.yzm_float{color: #999; float: left; margin-right: 20px; transition: all 0.9s}
+.yzm_float span:hover{color: #333}
+.yzm_float i{margin-right:5px}
+.yzm_float em{font-style: normal;}
+.yzm_praise span,.yzm_praise span:hover{color: #c00;}
+.yzm_button{width: auto; display: inline-block; height: 35px; line-height: 35px; padding: 0 23px; background-color: #009688; color: #fff; white-space: nowrap; text-align: center; font-size: 14px; border: none; border-radius: 2px; cursor: pointer; font-weight: 700; transition: opacity .2s}
+.yzm_button:hover{opacity: .8; filter: alpha(opacity=80); color: #fff}
+.yzm_user_info{margin-top: 5px; padding: 10px 15px}
+.yzm_user_info .userlink{display: block; margin-bottom: 10px}
+.yzm_user_info_avatar{width: 70%; margin: 0 auto; text-align: center}
+.yzm_user_info_avatar .useravatar{height: 150px; width: 150px}
+.yzm_user_info_avatar .usergroup img{height: 20px}
+.yzm_user_info_operation a{padding: 6px 50px; margin-top: 5px; display: inline-block; text-align: center; font-size: 16px; color: #fff; background: #46be8a; transition: all .3s}
+.yzm_user_info_operation a.primary{background: #2e6da4; float: right}
+.yzm_user_info_operation a:hover{opacity: .8; filter: alpha(opacity=80)}
+.yzm_add{background: #fff}
+.yzm_add h3{margin: 15px 15px; height: 55px; line-height: 70px; font-weight: 400; border-bottom: 1px solid #e6e6e6; color: #009688; font-size: 14px; margin-bottom: 20px}
+.yzm_add h3 b{font-weight: 400; display: block; height: 54px; width: 100px; text-align: center; border-bottom: 2px solid #009688}
+.yzm_add form{margin: 0 15px; padding-bottom: 50px}
+.yzm_col{margin-bottom: 20px; position: relative}
+.yzm_col .yzm_span{display: inline-block; width: 110px; height: 38px; line-height: 38px; border-radius: 2px 0 0 2px; text-align: center; background-color: #fbfbfb; overflow: hidden; border: 1px solid #e6e6e6; border-right: none; color: #000}
+.yzm_col select{display: inline-block; min-width: 150px; height: 40px; line-height: 40px; border-radius: 2px 0 0 2px; font-size: 14px; text-align: center; background-color: #fbfbfb; border: 1px solid #e6e6e6; color: #000; padding: 0 5px; position: absolute; left: 110px}
+.yzm_col .text_input{display: inline-block; width: 600px; height: 38px; line-height: 38px; border-radius: 2px 0 0 2px; font-size: 14px; background-color: #fff; border: 1px solid #e6e6e6; color: #000; padding: 0 5px; position: absolute; left: 110px}
+.yzm_col .code_input{width: 150px}
+.yzm_col .yzm_textarea{width: 1050px; height: 250px; border-radius: 2px 0 0 2px; font-size: 14px; background-color: #fff; border: 1px solid #e6e6e6; color: #000; padding: 5px 5px}
+.yzm_col .text_input:focus,
+.yzm_col .text_input:hover,
+.yzm_col .yzm_textarea:focus{border-color: #c9c9c9; outline: medium none; transition: all 218ms ease 0s}
+.yzm_col .code_img{position: absolute; left: 280px; cursor: pointer}
+.yzm_sign a{background: #46be8a}
+.yzm_sign a:hover{background: #5cd29d}
+.yzm_disabled a,
+.yzm_disabled a:hover{background: #f9f9f9; cursor: not-allowed; color: #999; border: 1px solid #ddd}
+.yzm_sign p{text-align: center; margin-top: 10px}
+.yzm_sign p img{height: 14px; cursor: pointer}
+.yzm_sign p span{color: #ff5722; margin: 0 3px}
+.yzm_comment_more{height: 35px; margin-bottom: 10px; line-height: 35px; text-align: center}
+.yzm_comment_page{margin-bottom: 50px;}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('举报信息列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <!--<li>
+                                <label>模块：</label>
+                                <input type="text" name="module"/>
+                            </li>
+                            <li>
+                                <label>被举报目标id：</label>
+                                <input type="text" name="targetId"/>
+                            </li>-->
+                            <li>
+                                <label>处理标志：</label>
+                                <select name="dealFlag">
+                                    <option value="">所有</option>
+                                    <option value="0">未处理</option>
+                                    <option value="1">已处理</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="forum:report:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="forum:report:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>-->
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="forum:report:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('forum:report:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('forum:report:remove')}]];
+        var reportTypeDatas = [[${@dict.getType('report_type')}]];
+        var prefix = ctx + "forum/report";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "举报信息",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id',
+                    title: '主键',
+                    visible: false
+                },
+                {
+                    field: 'module',
+                    title: '模块'
+                },
+                {
+                    field: 'reportType',
+                    title: '举报类型',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(reportTypeDatas, value);
+                    }
+                },
+                {
+                    field: 'targetId',
+                    title: '被举报目标id'
+                },
+                {
+                    field: '预览',
+                    title: '预览',
+                    formatter: function(v, row, index) {
+                        if(row.module=='question'){
+                            return '<a target="_blank" href="/forum/question/questionDetail/'+row.targetId+'">预览</a>';
+                        }
+                    }
+                 },
+                {
+                    field: 'dealFlag',
+                    title: '处理标志',
+                    formatter: function(value, row, index) {
+                       if(value==1||value=='1'){
+                           return "<font color='green'>已处理</font>"
+                       }else{
+                            return "<font color='red'>未处理</font>"
+                        }
+                    }
+                },
+                {
+                    field: 'dealTime',
+                    title: '处理时间'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                       if(row.dealFlag==0||row.dealFlag=='0'){
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editFull(\'' + row.id + '\')"><i class="fa fa-edit"></i>处理</a> ');
+                       }
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

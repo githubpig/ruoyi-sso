@@ -1,0 +1,84 @@
+<!--top begin-->
+<header id="header">
+    <style>
+        #starlist li a:hover, #starlist #selected, .selected > a, #starlist li:hover {
+            color: #00a779 !important;
+            background: none;
+        }
+    </style>
+
+    <div class="navbox">
+        <h2 id="mnavh"><span class="navicon"></span></h2>
+        <div class="logo" style="margin-right: 20px;"><a href="/">ruoyi-plus | <font class="font16">个人博客</font></a></div>
+        <nav>
+            <ul id="starlist">
+
+                <li >
+                    <a class="headMenu"  th:if="${#strings.isEmpty(tagId)}"  th:href="@{/}" title="首页"  th:id="${categoryId=='index' ? 'selected' : ''} " >
+                        首页
+                    </a>
+                    <a th:if="${not #strings.isEmpty(tagId)}" th:href="@{/}" title="首页" >
+                        首页
+                    </a>
+                </li>
+
+                <li th:each="category:${@cms.selectNavCategories()}" th:class="${#lists.isEmpty(category.nodes)?'':'menu'}">
+                    <a  th:id="${category.categoryId +'' ==categoryId ? 'selected':''}"  th:text="${category.categoryName}" th:if="${category.parentId==null||category.parentId==0}" th:href="@{${not #lists.isEmpty(category.nodes)? '#': ('/blog/category/' + category.categoryId)}}">
+                      
+                    </a>
+                    <ul th:if="${not #lists.isEmpty(category.nodes)}" class="sub">
+                        <li th:each="node:${category.nodes}"><a th:href="@{${'/blog/category/' + node.categoryId}}" th:text="${node.categoryName}"></a></li>
+                    </ul>
+
+                </li>
+
+                <li th:if="${@cms.showMore()==true}" class="menu"><!---->
+                    <a>
+                        其 &nbsp;&nbsp;它
+                    </a>
+                    <ul   class="sub" style="top: 55px;">
+                        <li th:each="node:${@cms.selectNavCategoriesMore()}"><a th:href="@{${'/blog/category/' + node.categoryId+'?rootCategoryId='+node.categoryId}}" th:text="${node.categoryName}"></a></li>
+                    </ul>
+
+                </li>
+
+                <li><a href="/blog/albums?pageSize=6" th:id="${pageUrl=='/blog/albums' ? 'selected' : ''}">相册</a></li>
+
+                <li><a href="/blog/timeline?pageSize=20" th:id="${pageUrl=='/blog/timeline' ? 'selected' : ''}">时间轴</a></li>
+
+                <li><a th:href="@{/blog/siteMsg}" th:id="${categoryId=='siteMsg' ? 'selected' : ''} ">
+                    留言板
+                </a></li>
+                <li><a href="/forum" >官方论坛</a></li>
+                <!--<li class="">
+                    <a th:href="@{/admin/login}" target="_blank" >
+                        登陆后台
+                    </a>
+                </li>-->
+
+
+            </ul>
+        </nav>
+        <div class="searchico"></div>
+    </div>
+</header>
+<div class="searchbox">
+    <div class="search">
+        <form action="/blog/search" method="get" name="searchform" id="searchform">
+            <input name="content" id="content" class="input_text" value="请输入关键字词" style="color: rgb(153, 153, 153);" onfocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}" onblur="if(value==''){this.style.color='#999';value='请输入关键字词'}" type="text">
+
+            <input  class="input_submit" type="submit" style="cursor: pointer">
+        </form>
+    </div>
+    <div class="searchclose"></div>
+</div>
+<!--top end-->
+<script  th:inline="javascript">
+    var categoryId=[[${categoryId}]];
+    var rootCategoryId=[[${rootCategoryId}]];
+    setTimeout(function(){
+        if(categoryId!='index'){
+            $(".headMenu").attr("id","");
+        }
+    },60)
+</script>

@@ -1,0 +1,121 @@
+<!--<div class="card">
+    <h2>我的名片</h2>
+    <p>网名：DanceSmile | 即步非烟</p>
+    <p>职业：Web前端设计师、网页设计</p>
+    <p>现居：四川省-成都市</p>
+    <p>Email：dancesmiling@qq.com</p>
+    <ul class="linkmore">
+        <li><a href="http://www.yangqq.net" target="_blank" class="iconfont icon-zhuye" title="网站地址"></a></li>
+        <li><a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=747506908@qq.com" target="_blank" class="iconfont icon-youxiang" title="我的邮箱"></a></li>
+        <li><a href="http://wpa.qq.com/msgrd?v=3&amp;uin=476847113&amp;site=qq&amp;menu=yes" target="_blank" class="iconfont icon-&#45;&#45;" title="QQ联系我"></a></li>
+        <li id="weixin"><a href="#" target="_blank" class="iconfont icon-weixin" title="关注我的微信"></a><i><img src="/blog/jxhx/images/wx.png"></i></li>      </ul>
+</div>-->
+<div class="whitebg card" style="height: auto;">
+    <div class="card-pic">
+        <div class="card-pic-wrap">
+            <img src="/blog/jxhx/images/avatar.jpg" alt="阿文博客">
+        </div>
+    </div>
+    <div class="adout-author">
+
+        <p class="website">人生的价值，并不是用时间，而是用深度量去衡量的。——列夫·托尔斯泰</p>
+    </div>
+    <div class="aside-content">
+        <div class="about-articles">
+            <table>
+                <tbody>
+                <tr>
+                    <td>
+                        <strong><a href="javascipt:void(0);" th:text="${@cms.getSiteInfo().articleCount}"></a></strong>
+                        <span>文章</span>
+                    </td>
+                    <td>
+                        <strong><a href="javascipt:void(0);" th:text="${@cms.getSiteInfo().hitCount}"></a></strong>
+                        <span>浏览</span>
+                    </td>
+                    <td>
+                        <strong><a href="javascipt:void(0);"  th:text="${@cms.getSiteInfo().commentCount}"></a></strong>
+                        <span>评论</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="whitebg cloud">
+    <h2 class="htitle">标签云</h2>
+    <ul>
+        <li>
+        <a style="height: auto;" th:each="item:${@cms.getTagsCloud()}"  th:classappend="${pageUrl == 'blog/tag/'+item.tagId}?'active'" th:href="@{${'/blog/tag/'+item.tagId+'?pageSize=10'}}" th:text="${item.tagName+'('+item.count+')'}"></a>
+        </li>
+
+    </ul>
+</div>
+
+<div class="whitebg tuijian">
+    <h2 class="htitle">站长推荐</h2>
+    <section class="topnews imgscale"><a href=""><img src="/blog/jxhx/images/tuijian.jpg"><span></span></a></section>
+    <ul>
+
+        <li th:each="item,temp:${@cms.recommendedList(6)}"  >
+            <a th:title="${item.title}" th:href="${'/blog/article/'+item.id}">
+                <i><img th:src="${item.coverImage}"/></i>
+                <p th:text="${item.title}"></p>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<div class="whitebg notice">
+    <h2 class="htitle">最近更新</h2>
+    <ul>
+        <li th:each="item,temp:${@cms.recentList(6)}"  >
+            <span th:class="${'li-icon li-icon-'+(temp.index+1)}" th:text="${temp.index+1}"></span>
+            <a th:text="${item.title}" th:href="${'/blog/article/'+item.id}"></a>
+        </li>
+
+    </ul>
+</div>
+
+<div class="whitebg paihang">
+    <h2 class="htitle">热点排行</h2>
+    <!--<section class="topnews imgscale"><a href=""><img src="/blog/jxhx/images/b02.jpg"><span></span></a></section>-->
+    <ul>
+
+        <li th:each="item,temp:${@cms.hotList(6)}" ><i></i>
+
+            <a th:text="${item.title}" th:href="${'/blog/article/'+item.id}"></a>
+        </li>
+    </ul>
+</div>
+
+
+
+<div class="ad whitebg imgscale">
+    <ul>
+        <a href="#" target="_blank"><img src="/blog/jxhx/images/jxhx2.jpg"></a>      </ul>
+</div>
+
+<div class="whitebg tongji">
+    <h2 class="htitle">站点信息</h2>
+    <ul>
+        <li><b>建站时间</b>：2020-10-01</li>
+        <li><b>更新时间</b>：2021-03-09</li>
+        <li><b>网站程序</b>：ruoyi-plus</li>
+        <!--<li><b>在线人数</b>：<span class="onlineNum">0</span>人</li>-->
+        <li><b>主题模板</b>：<a href="#" target="_blank">《今夕何夕》</a></li>
+        <li><b>文章统计</b>：<a href="#" target="_blank" th:text="${@cms.getSiteInfo().articleCount}"></a>篇文章</li>
+        <li><b>标签总数</b>：<a href="#" target="_blank" th:text="${@cms.getSiteInfo().tagCount}"></a>个</li>
+        <li><b>加我微信</b>：扫码，加我微信</li>
+        <li class="tongji_gzh"><a ><img src="/blog/jxhx/images/wx.png"></a></li>
+    </ul>
+</div>
+
+<div class="links whitebg">
+    <h2 class="htitle">友情链接 <a href="/blog/applyFriendLink" title="申请友链" style="float:right;font-size: 16px; color: #4f9995;" target="_blank">+申请友链</a></h2>
+    <ul>
+        <li th:each="item:${@cms.getFriendLinks()}"> <a th:href="${item.link}" th:text="${item.name}" target="_blank"></a></li>
+    </ul>
+</div>

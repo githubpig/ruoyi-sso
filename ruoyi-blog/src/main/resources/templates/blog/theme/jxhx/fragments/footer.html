@@ -1,0 +1,114 @@
+<footer style="padding:0px;background: #fff;">
+    <div class="box">
+
+        <div class="endnav">
+            <p style="margin-top: 10px;text-align: center;">
+                <span id="localtime"></span> <!--已运行多少天代码-->
+                <span>本站勉强运行</span><span id="span_dt_dt"></span>
+                <script> /*建站时间*/
+                function show_date_time() {
+                    window.setTimeout("show_date_time()", 1e3);
+                    var BirthDay = new Date("2020/10/01"), today = new Date,
+                        timeold = today.getTime() - BirthDay.getTime(), msPerDay = 864e5,
+                        e_daysold = timeold / msPerDay, daysold = Math.floor(e_daysold),
+                        e_hrsold = 24 * (e_daysold - daysold), hrsold = Math.floor(e_hrsold),
+                        e_minsold = 60 * (e_hrsold - hrsold), minsold = Math.floor(60 * (e_hrsold - hrsold)),
+                        seconds = Math.floor(60 * (e_minsold - minsold));
+                    span_dt_dt.innerHTML = daysold + "天" + hrsold + "时" + minsold + "分" + seconds + "秒";
+                }
+                show_date_time();
+                </script>
+                <script type="text/javascript">
+                    function showLocale(objD) {
+                        var str, colorhead, colorfoot;
+                        var yy = objD.getYear();
+                        if (yy < 1900) yy = yy + 1900;
+                        var MM = objD.getMonth() + 1;
+                        if (MM < 10) MM = '0' + MM;
+                        var dd = objD.getDate();
+                        if (dd < 10) dd = '0' + dd;
+                        var hh = objD.getHours();
+                        if (hh < 10) hh = '0' + hh;
+                        var mm = objD.getMinutes();
+                        if (mm < 10) mm = '0' + mm;
+                        var ss = objD.getSeconds();
+                        if (ss < 10) ss = '0' + ss;
+                        var ww = objD.getDay();
+                        if (ww == 0) colorhead = "<font color=\"#FF3030\">";
+                        if (ww > 0 && ww < 6) colorhead = "<font color=\"#FF3030\">";
+                        if (ww == 6) colorhead = "<font color=\"#FF3030\">";
+                        if (ww == 0) ww = "星期日";
+                        if (ww == 1) ww = "星期一";
+                        if (ww == 2) ww = "星期二";
+                        if (ww == 3) ww = "星期三";
+                        if (ww == 4) ww = "星期四";
+                        if (ww == 5) ww = "星期五";
+                        if (ww == 6) ww = "星期六";
+                        colorfoot = "</font>"
+                        str = colorhead + yy + "-" + MM + "-" + dd + "丨" + hh + ":" + mm + ":" + ss + "丨" + ww + colorfoot;
+                        return (str);
+                    }
+                    function tick() {
+                        var today;
+                        today = new Date();
+                        document.getElementById("localtime").innerHTML = showLocale(today);
+                        window.setTimeout("tick()", 1000);
+                    }
+
+                    tick();
+                </script>
+            </p>
+
+          <p style="text-align: center">Copyright © <a href="" target="_blank">http://ry.aileig.com/</a> All Rights Reserved. 备案号：<a href="" target="_blank">冀ICP备20019204号</a>
+
+
+            </p>
+
+            <center style="font-size: 16px;font-family: 华文行楷,Arial,Lucida Grande,Tahoma,sans-serif;" class="font_footer">
+                <font color="#FF6666">富强</font>丨
+                <font color="#336666">民主</font>丨
+                <font color="#009966">文明</font>丨
+                <font color="#FF0000">和谐</font>丨
+                <font color="#6666CC">自由</font>丨
+                <font color="#33CC33">平等</font>丨
+                <font color="#6666cc">公正</font>丨
+                <font color="#FF6666">法制</font>丨
+                <font color="#336666">爱国</font>丨
+                <font color="#009966">敬业</font>丨
+                <font color="#FF9933">诚信</font>丨
+                <font color="#6666CC">友善</font>
+            </center>
+        </div>
+    </div>
+    <a href="#">
+        <div class="top"></div>
+    </a>
+    <!-- 鱼群跳跃 -->
+    <div id="j-fish-skip" style="background: #fff;"><canvas width="1903" height="20"></canvas></div>
+    <!-- 鱼群跳跃 -->
+    <script th:src="@{/blog/jxhx/js/fish.js}"></script>
+    <script th:src="@{/blog/jxhx/js/yinghua.js}"></script>
+
+    <!--<script th:src="@{/blog/jxhx/js/background.min.js}"></script>
+    <script th:src="@{/blog/jxhx/js/cursor.min.js}"></script>-->
+    <script>
+        //禁用F12
+        window.onkeydown = window.onkeyup = window.onkeypress = function (event) {
+            // 判断是否按下F12，F12键码为123
+            if (event.keyCode == 123) {
+                event.preventDefault(); // 阻止默认事件行为
+                //alert("按F12想干嘛？要不要加入我们？");
+                window.event.returnValue = false;
+            }
+        }
+        //禁用CTRL+S 保存网页代码
+        document.onkeydown = function (e) {
+            e = e || window.event;
+            if ((e.which || e.keyCode) === 83 && (e.metaKey || e.ctrlKey)) {
+                alert("CTRL+S不好玩，哈哈哈！");
+                e.preventDefault ? e.preventDefault() : e.returnValue = false;
+            }
+        }
+
+    </script>
+</footer>

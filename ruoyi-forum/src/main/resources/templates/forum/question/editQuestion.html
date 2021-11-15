@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>编辑帖子</title>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
+    <link rel="stylesheet" href="/forum/css/main.min.css">
+    <link rel="bookmark" type="image/x-icon" href="forum/images/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/forum/images/favicon.ico">
+
+    <link rel="stylesheet" href="/forum/css/thirdStylePersonal.css">
+    <link href="/ruoyi/css/ry-ui.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/forum/css/demo.css">
+    <link rel="stylesheet" href="/forum/css/personalProfile.css">
+    <link rel="stylesheet" href="/forum/css/uploadpublic.css">
+    <link href="/ruoyi/css/ry-ui.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/forum/css/mystyle.css">
+    <script type="text/javascript" src="/forum/lib/jquery.min.js"></script>
+    <script src="/ajax/libs/iCheck/icheck.min.js"></script>
+    <style>
+        .clearfloat{clear:both;height:0;font-size: 1px;line-height: 0px;}
+        .flat.open {
+            z-index: 99999999999;
+        }
+        .fullbg {
+            background-color:#000;
+            opacity:0;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            z-index:1001;
+            position:fixed;
+            display:none;
+        }
+        #editmodes{
+            position:fixed;
+            top:0;
+            right:0;
+            z-index:1002;
+            height:100%;
+            width:0px;
+            overflow:auto;
+            overflow-x:hidden;
+            scrollbar-face-color: #FFFFFF;
+            scrollbar-shadow-color: #eee;
+            scrollbar-highlight-color: #eee;
+            scrollbar-3dlight-color: #FFFFFF;
+            scrollbar-darkshadow-color: #FFFFFF;
+            scrollbar-track-color: #FFFFFF;
+            scrollbar-arrow-color: #D2E5F4;
+            background:#FFF;
+        }
+
+
+        .uploadImg {
+            width: 80px;
+            border: #aaa dotted 1px;
+            text-align: center;
+            padding: 21px 0;
+            background: #FFF;
+            font-size: 32px;
+            cursor: pointer;
+            color: #999;
+        }
+        .si {
+            font-family: Simple-Line-Icons;
+            speak: none;
+            font-style: normal;
+            font-weight: 400;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+        }
+        .uploadImg:hover {
+            border: #F60 dotted 1px;
+            color: #F60;
+        }
+        .slectEditMode{
+            padding:5px 0 5px 0;
+            margin-top:5px;
+        }
+        .slectEditMode a{
+            display:inline-blodk;
+            padding:5px 10px;
+            background:green;
+            border-radius:5px;
+            color:#FFF;
+        }
+
+    </style>
+</head>
+<body>
+<div id="body">
+
+    <div th:replace="forum/header"></div>
+    <!--*******************************-->
+    <main class="main-wrapper">
+        <div class="container-area">
+
+            <div class="card-media personal-menu left">
+                <ul class="menu-list">
+                    <li class="menu-list-default current">
+                        <i></i>
+                        <a th:href="@{'/forumQuestion/editQuestion/'+${forumQuestion.id}}">编辑问题</a>
+                    </li>
+                    <!--<li class="menu-list-default ">
+                        <i></i>
+                        <a href="#">写文章</a>
+                    </li>-->
+                </ul>
+            </div>
+
+            <div class="container-area-right">
+                <div class="middle-title-wrap" style="color: red;font-size: 15px;line-height: 2;padding:8px;">
+                    <p>1.请勿发布广告，如有发布广告者，将自动永久封号！</p>
+                    <p>2.如您发布的内容中需要上传图片，请将图片大小控制在1MB之内，谢谢配合！</p>
+                </div>
+
+                <form  id="form_question" th:object="${forumQuestion}">
+                    <input type="hidden" name="id" th:value="${forumQuestion.id}">
+                    <div style="margin-top: 8px;">
+                        <div class="bg-box-radius">
+
+                            <div class="tab-menu border-bottom">
+                               <!-- <ul class="tab-box">
+                                    <li  class="current" ><a>提问题</a></li>
+                                </ul>-->
+                            </div>
+
+                            <div class="datum-item-box border-bottom">
+
+                                <div class="upload-con-box">
+
+                                    <div class="work-verify">
+
+                                        <div class="work-namebox work-title-box" style="padding-top: 10px;padding-bottom: 10px;">
+                                            <div class="worktext-lbox">
+                                                <input type="text" autocomplete="off" th:value="${forumQuestion.title}"  id="title" name="title" placeholder="请输入文章标题" class="text-style work-name" style="padding-right: 40px;max-width: 760px">
+                                            </div>
+
+                                            <span id="titleError" class="error-prompt right work-nametips" style="display: inline;margin-top: -33px;">
+                                                <i class="error-icon"></i>必填项
+                                            </span>
+
+                                        </div>
+
+
+                                        <div class="work-namebox work-title-box" style="padding-top: 10px;padding-bottom: 20px;">
+                                            <div class="worktext-lbox">
+
+                                                <input id="categoryId" name="categoryId" th:value="${forumQuestion.forumCategory?.categoryId}" type="hidden" />
+
+                                                <select onchange="categoryChange()" id="categoryName"  class="dropdown" style="display: inline-block;z-index: 99999999999999" data-settings='{"wrapperClass":"flat"}'>
+                                                    <option value="" >-请选择栏目-</option>
+                                                    <option th:each="item,temp:${@forum.selectNavCategoriesAll()}"  th:selected="${item.categoryId==forumQuestion.forumCategory.categoryId}"    th:value="${item.categoryId}"  th:text="${item.categoryName}"></option>
+                                                </select>
+                                            </div>
+
+                                            <span id="categoryError" class="error-prompt right work-nametips" style="display: inline;margin-top: -33px;">
+                                                <i class="error-icon"></i>必填项
+                                            </span>
+
+                                        </div>
+
+                                        <script id="editor" name="content" type="text/plain" ></script>
+                                        <span id="contentError" class="error-prompt right work-nametips" style="display: inline;margin-top: -500px;">
+                                                <i class="error-icon"></i>必填项
+                                        </span>
+
+
+                                        <div  style="padding-bottom: 10px;">
+                                            <input type="button" onclick="showEditMode()" style="background-color:green;margin-top:8px;color:#fff;padding:5px 13px ;" class="biz-publish-btn btn-default-main " value="布局模板">
+                                        </div>
+                                        <div style="padding-bottom: 10px;">
+                                            <label class="toggle-switch switch-solid">上传附件&nbsp;&nbsp;
+                                                <input type="checkbox" id="uploadAttachment" th:checked="${not #strings.isEmpty(forumQuestion?.attachment)}">
+                                                <span></span>
+                                            </label>
+                                            <input type="hidden" id="attachment" name="attachment" th:value="${forumQuestion.attachment}"/>
+                                        </div>
+                                        <div id="div_upload"  style="padding-bottom: 10px;display: none;">
+                                            <p style="margin-bottom: 10px;">点击上传附件:</p>
+                                            <div id="uploadBtn" class="uploadImg " style="margin-bottom: 10px;">
+                                                <i class="si ">+</i>
+                                            </div>
+                                            <div    style="margin-bottom: 10px;">
+                                                <span style="color: #0caffb;font-size: 14px;" id="attachmentFile">(重复上传会覆盖)</span>
+                                            </div>
+                                            <p style="margin-bottom: 10px;">下载类型:</p>
+                                            <div class="radio-box" style="margin-bottom: 10px;" th:each="dict : ${@dict.getType('cms_download_type')}">
+                                                <input type="radio" th:id="${'download_type_' + dict.dictCode}" id="downloadType" name="downloadType" th:value="${dict.dictValue}" th:checked="${dict.default}"  th:field="*{downloadType}">
+                                                <label th:for="${'download_type_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                                            </div>
+                                            <div id="div_pay" style="display: none">
+                                                <p style="margin-bottom: 10px;">付费类型:</p>
+                                                <div class="radio-box" style="margin-bottom: 10px;" th:each="dict : ${@dict.getType('cms_pay_type')}">
+                                                    <input type="radio" th:id="${'pay_type_' + dict.dictCode}" name="payType" th:value="${dict.dictValue}" th:checked="${dict.default}"   th:field="*{payType}">
+                                                    <label th:for="${'pay_type_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                                                </div>
+                                                <p style="margin-bottom: 10px;">付费金额:</p>
+                                                <input type="text" oninput = "value=value.replace(/[^\d]/g,'')" th:value="${forumQuestion.payCount}" name="payCount" id="payCount" style="border: 1px solid #aaa;width: 150px;height: 30px;"/>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="attachmentFlag" value="0"/>
+                                        <div class="articlefoot" style="padding-bottom: 20px;">
+                                            <input type="button" onclick="publish()" class="biz-publish-btn btn-default-main publishbtn" value="保存">
+                                            <input type="button" onclick="goBack()" class="biz-preview-btn btn-default-secondary previewbtn" value="返回">
+
+                                        </div>
+
+
+                                        <textarea hidden="text" id="divdata">[[*{content}]]</textarea>
+                                        <div class="clearfloat"></div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </main>
+    <!--*******************************-->
+    <div th:replace="forum/footer"></div>
+    <div style="display: none">
+        <div id="empty_message_box" class="msg-box-null">
+            <div class="msg-box-inner">
+                <span class="null-images"></span>
+                <span class="msg-null-tips">没有新消息</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script type="text/javascript" src="/forum/js/common.js"></script>
+<script type="text/javascript" src="/forum/lib/jquery.easydropdown-version0.1.js"></script>
+<script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
+<script src="/forum/lib/edtiorCrop/js/bootstrap.min.js"></script>
+
+<script  th:src="@{/ruoyi/js/ry-ui.js}"></script>
+
+<script type="text/javascript" src="/forum/js/personalProfile.js"></script>
+<script th:inline="javascript"> var ctx = [[@{/}]];</script>
+<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+<script th:src="@{/ruoyi/js/fast.js}"></script>
+<script th:src="@{/ajax/libs/plupload/plupload.full.min.js}"></script>
+<th:block th:include="include :: ueditor" />
+
+<script>
+
+    var ue = UE.getEditor('editor');
+    function getContent() {
+        return UE.getEditor('editor').getContent();
+    }
+    function getContentTxt() {
+        return UE.getEditor('editor').getContentTxt();
+    }
+
+    function publish(){
+        var title=$("#title").val();
+        if(isEmpty(title)){
+            Fast.msg_error("标题不能为空!");return;
+        }
+        var category=$("#categoryId").val();
+        if(isEmpty(category)){
+            Fast.msg_error("栏目不能为空!");return;
+        }
+        var c = getContentTxt();
+        if (c == '' || c.length == 0) {
+            Fast.msg_error("内容不能为空！"); return;
+        }
+        var attachmentFlag=$("#attachmentFlag").val();
+        if(attachmentFlag=='1'){
+            var url= $("#attachment").val();
+            if(isEmpty(url)){
+                Fast.msg_error("请上传附件!");return;
+            }
+            var v= $("input[name='downloadType']:checked").val();
+            if(v==2){
+                var payCount=$("#payCount").val();
+                if(isEmpty(payCount)){
+                    Fast.msg_error("金额不能为空!");return;
+                }
+            }
+        }
+        var prefix = ctx + "forumQuestion"
+        var params = $("#form_question").serialize();
+        $.operate.save(prefix + "/editQuestion",params,function(){
+            window.top.location.href="/myQuestion";
+        });
+    }
+    function goBack(){
+      window.top.location.href="/myQuestion";
+    }
+    $(function () {
+        $("#editor").css("height","380px");
+        $("#editor").css("width","760px");
+
+        //给UEeditor赋值
+        var data=$("#divdata").text();
+        var ue = UE.getEditor('editor');
+        var proinfo=$("#divdata").text();
+        ue.ready(function() {//编辑器初始化完成再赋值
+            ue.setContent(data);  //赋值给UEditor
+        });
+        var v=$("#uploadAttachment").prop("checked");
+        if(v){
+            $("#div_upload").show();
+            $("#attachmentFlag").val("1");
+        }else{
+
+            $("#div_upload").hide();
+            $("#attachmentFlag").val("0");
+        }
+
+        $("#uploadAttachment").on("change",function(){
+            var v=$(this).prop("checked");
+            if(v){
+                $("#div_upload").show();
+                $("#attachmentFlag").val("1");
+            }else{
+
+                $("#div_upload").hide();
+                $("#attachmentFlag").val("0");
+            }
+        });
+
+        var v= $("input[name='downloadType']:checked").val();
+
+        if(v==2){
+            $("#div_pay").show();
+        }else{
+            $("#div_pay").hide();
+        }
+
+        // iCheck单选框及复选框事件绑定
+        if ($.fn.iCheck !== undefined) {
+            $(".check-box:not(.noicheck),.radio-box:not(.noicheck)").each(function() {
+                $(this).iCheck({
+                    checkboxClass: 'icheckbox-blue',
+                    radioClass: 'iradio-blue',
+                })
+            })
+        }
+
+        $("input[name='downloadType']").on('ifChecked', function(event){
+            var v= $("input[name='downloadType']:checked").val();
+            if(v==2){
+                $("#div_pay").show();
+            }else{
+                $("#div_pay").hide();
+            }
+        });
+
+    })
+
+    function categoryChange(){
+        var v=$("#categoryName").val();
+        $("#categoryId").val(v);
+    }
+
+    var uploader = new plupload.Uploader({ //实例化一个plupload上传对象
+        runtimes: 'html5,silverlight,html4,flash',
+        browse_button : 'uploadBtn',
+        url : ctx+"forum/uploadAttachment",
+        flash_swf_url : "/ajax/libs/plupload/Moxie.swf",
+        silverlight_xap_url : "/ajax/libs/plupload/Moxie.xap",
+        filters: {
+            max_file_size: '10mb', //最大上传文件大小（格式100b, 10kb, 10mb, 1gb）
+            mime_types : [
+                {title: "压缩文件", extensions: "zip,rar,gz,bz2,jar"}
+            ]
+        }//只允许上传图片文件
+    });
+    //绑定文件添加进队列事件
+    uploader.bind('FilesAdded',function(uploader,files){
+        uploader.start(); //开始上传
+    });
+    uploader.bind('Error',function(up, err){
+        alert(err.message);//上传出错的时候触发
+    });
+    uploader.bind("FileUploaded", function(up, file, res){
+
+        var json=res.response;
+        json=JSON.parse(json);
+
+        if(json.code!=0){
+            $.modal.alertError(json.msg);
+        }
+        uploadCallback(json.data);
+
+    })
+    window.onload = function() {
+        uploader.init(); //初始化
+    };
+    function uploadCallback(json){
+        console.log(json);
+        $("#attachmentFile").html(json.name);
+        //$("#attachment").val(json.path);
+        $("#attachment").val(json.url);
+    }
+</script>
+
+<div id="editmodes"></div>
+<div class="fullbg" id="fullbg1" onclick="hide_nav($('#editmodes'),$('#fullbg1'))"></div>
+<script type="text/javascript">
+    function insertHtml(nums) {
+        var strs=$('.stylemode'+nums).html();
+        ue.execCommand('insertHtml',strs);
+        hide_nav($('#editmodes'),$('#fullbg1'));
+    }
+    function showEditMode(){
+        $.get(ctx+"forumQuestion/articleTemplates",function(d){
+            $('#editmodes').html(d);
+        });
+        show_nav($('#editmodes'),$('#fullbg1'));
+        $('#fullbg1').height($(window).height());
+        $('#editmodes').height($(window).height());
+    }
+    function show_nav(node,fullbg){
+        fullbg.css({'display':'block'}).stop().animate({'opacity':.6},500,function(){
+            node.stop().animate({'width':'300px','padding':'0px 10px 0 10px'},300);
+        });
+    }
+    function hide_nav(node,fullbg){
+        fullbg.animate({'opacity':0},300,function(){
+            $(this).css({'display':'none'});
+        });
+        setTimeout(function(){
+            node.html('');
+            node.stop().animate({'width':'0px','padding':'0px 0px 0 0px'},300);
+        }, 500)
+    }
+
+
+</script>
+
+
+</body>
+</html>

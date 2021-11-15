@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" th:content="${@config.getKey('blog.index.keywords')}">
+    <meta name="description" th:content="${@config.getKey('blog.index.description')}">
+    <title th:text="${@config.getKey('blog.index.title')}"></title>
+
+    <link rel="stylesheet" th:href="@{/blog/jxhx/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/blog/jxhx/css/m.css}" />
+    <link rel="stylesheet" th:href="@{/ajax/libs/font-icon/icon.css}"/>
+    <script th:src="@{/blog/jxhx/js/jquery-1.8.3.min.js}"></script>
+    <script th:src="@{/blog/jxhx/js/comm.js}"></script>
+    <script th:inline="javascript"> var ctx = [[@{/}]]; </script>
+
+
+<style>
+    .swiper-container{width: auto !important;}
+
+    .swiper-container img{max-width:100%;}
+
+    .headline{width: 100%;}
+    .headline ul li{float:left;width: 33%;margin-left:3px; }
+
+</style>
+
+</head>
+<body>
+<div th:replace="blog/theme/jxhx/fragments/navbar"></div>
+
+<article>
+    <!--lbox begin-->
+    <div class="lbox">
+        <div class="banbox">
+        <div class="banner">
+            <div id="swiperContainer" class="fader" style="">
+
+            </div>
+        </div>
+        </div>
+        <div class="headline" style="margin-bottom: 10px;">
+            <ul style="height: auto;">
+                <li  th:each="item:${@cms.focusList(3)}" >
+                    <a  th:title="${item.title}" th:href="${'/blog/article/'+item.id}">
+                        <img  th:src="${item.coverImage}"/>
+                        <span th:text="${item.title}"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="zhuanti whitebg">
+            <h2 class="htitle">特别推荐</h2>
+            <ul>
+            <li th:each="item:${@cms.recommendedList(6)}"  >
+                <i class="ztpic">
+                    <a th:title="${item.title}" th:href="${'/blog/article/'+item.id}" target="_blank">
+                        <img th:src="${item.coverImage}">
+                    </a>
+                </i>
+                <b th:text="${item.title}"></b>
+                <span th:text="${item.description}"></span>
+                <a th:href="${'/blog/article/'+item.id}" target="_blank" class="readmore">
+                文章阅读</a>
+            </li>
+            </ul>
+        </div>
+        <!--广告位-->
+        <div class="ad whitebg">
+            <a href="#" target="_blank">
+                <img src="/blog/jxhx/images/longad.jpg">
+            </a>
+        </div>
+
+        <div class="whitebg bloglist">
+            <h2 class="htitle">精彩博文</h2>
+            <ul>
+
+                <li th:each="item,temp:${@cms.topList(10)}" >
+                    <h3 class="blogtitle"><b th:if="${item.topFlag==1}">【顶】</b><a th:href="@{${'/blog/article/'+item.id}}" target="_blank" th:title="${item.title}"  th:text="${item.title}" ></a></h3>
+                    <span class="blogpic imgscale"><i><a>[[${item.category.categoryName}]]</a></i><a   th:href="@{${'/blog/article/'+item.id}}" target="_blank" th:title="${item.title}" ><img th:src="${item.coverImage}" th:alt="${item.title}"></a></span>
+                    <p class="blogtext" style="height: 58px" th:text="${item.description}" ></p>
+                    <p class="bloginfo">
+                        <span class="fa fa-clock-o"></span><span th:text="${#dates.format(item.createTime,'yyyy-MM-dd')}"></span>
+                        <span class="fa fa-eye"></span><span th:text="${item.hit}? ${item.hit} : 0"></span>
+                        <a style="color: #999;" class="comment-link-a" th:href="@{${'/blog/article/'+item.id+'#comment'}}"><span class="fa fa-heart"></span><span th:text="${item.upVote}? ${item.upVote} : 0"></span></a>
+
+                    </p>
+                    <a th:href="@{${'/blog/article/'+item.id}}" th:title="${item.title}"  class="viewmore">阅读更多</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="rbox">
+        <div th:replace="blog/theme/jxhx/fragments/sidebar_index"></div>
+
+    </div>
+
+<script th:src="@{/ruoyi/js/ry-ui.js}"></script>
+<th:block th:include="include :: cms-album" />
+
+<script type="text/javascript">
+    $(function(){
+        var url=ctx+"blog/getIndexBanner";
+        $.album.initAlbum("swiperContainer","blog_index",url);
+    })
+</script>
+</article>
+<div th:replace="blog/theme/jxhx/fragments/footer"></div>
+</body>
+</html>

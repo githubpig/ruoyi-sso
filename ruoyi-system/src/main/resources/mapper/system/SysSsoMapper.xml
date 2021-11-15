@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysSsoMapper">
+    
+    <resultMap type="SysSso" id="SysSsoResult">
+        <result property="id"    column="id"    />
+        <result property="logo"    column="logo"    />
+        <result property="appName"    column="app_name"    />
+        <result property="ssoLogin"    column="sso_login"    />
+        <result property="createtime"    column="createtime"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectSysSsoVo">
+        select id, logo, app_name, sso_login, createtime, status from sys_sso
+    </sql>
+
+    <select id="selectSysSsoListByIds"  resultType="String">
+        select app_name from sys_sso
+        where id in
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectSysSsoList" parameterType="SysSso" resultMap="SysSsoResult">
+        <include refid="selectSysSsoVo"/>
+        <where>  
+            <if test="appName != null  and appName != ''"> and app_name like concat('%', #{appName}, '%')</if>
+            <if test="createtime != null "> and createtime = #{createtime}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysSsoById" parameterType="Integer" resultMap="SysSsoResult">
+        <include refid="selectSysSsoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysSso" parameterType="SysSso" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_sso
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logo != null">logo,</if>
+            <if test="appName != null">app_name,</if>
+            <if test="ssoLogin != null">sso_login,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="status != null">status,</if>
+            createtime
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logo != null">#{logo},</if>
+            <if test="appName != null">#{appName},</if>
+            <if test="ssoLogin != null">#{ssoLogin},</if>
+            <if test="createtime != null">#{createtime},</if>
+            <if test="status != null">#{status},</if>
+            sysdate()
+         </trim>
+    </insert>
+
+    <update id="updateSysSso" parameterType="SysSso">
+        update sys_sso
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="logo != null">logo = #{logo},</if>
+            <if test="appName != null">app_name = #{appName},</if>
+            <if test="ssoLogin != null">sso_login = #{ssoLogin},</if>
+            <if test="createtime != null">createtime = #{createtime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysSsoById" parameterType="Integer">
+        delete from sys_sso where id = #{id}
+    </delete>
+
+    <delete id="deleteSysSsoByIds" parameterType="String">
+        delete from sys_sso where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

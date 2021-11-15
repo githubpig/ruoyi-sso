@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" th:content="${@config.getKey('blog.index.keywords')}">
+	<meta name="description" th:content="${@config.getKey('blog.index.description')}">
+	<title th:text="${@config.getKey('blog.index.title')}"></title>
+
+	<link rel="stylesheet" th:href="@{/blog/jxhx/css/base.css}" />
+	<link rel="stylesheet" th:href="@{/blog/jxhx/css/m.css}" />
+	<link rel="stylesheet" th:href="@{/ajax/libs/font-icon/icon.css}"/>
+	<script th:src="@{/blog/jxhx/js/jquery-1.8.3.min.js}"></script>
+	<script th:src="@{/blog/jxhx/js/comm.js}"></script>
+	<script th:inline="javascript"> var ctx = [[@{/}]]; </script>
+
+
+
+</head>
+<body>
+<div th:replace="blog/theme/jxhx/fragments/navbar"></div>
+
+<article>
+	<div class="whitebg about">
+		<div class="ab_box"> <i class="avatar_pic"><img src="/blog/jxhx/images/avatar.jpg"></i>
+			<h3>杨青</h3>
+			<p>一个80后草根女站长！Web前端设计师、网页设计师。</p>
+			<p>欢迎您，来到我的个人博客，你，我生命中一个重要的过客，我们之所以是过客，因为你未曾会为我停留。</p>
+		</div>
+		<h2 class="gd_title">内心独白</h2>
+		<p class="ab_dubai">我叫杨青青，我是一个80后草根女站长！09年入行。我一直潜心研究网页前端技术，一边工作一边积累经验，分享一些个人博客模板，以及网站优化等心得。我入行早，大家也亲切的叫我“青姐”。我的个人博客搜索“个人博客”、“博客”，一直都靠前。最有意思的是，我有三年的时间没有去更新它，依然排在前面。虽然期间有很多的不容易，但是我都没有放弃过。选了这一行 ，就深深的喜欢上它。我喜欢一句话“冥冥中该来则来，无处可逃”。我喜欢上了前端设计，喜欢坐在电脑前敲代码，喜欢跟一堆程序员聊天。这辈子，我也逃不出去了，深深的陷了进来。 </p>
+	</div>
+</article>
+<div th:replace="blog/theme/jxhx/fragments/footer"></div>
+
+<script>
+    /*加载底部前执行。ps：防止闪现
+     控制当页面内容过少时，底部仍在屏幕最下方
+     主体内容最小高度
+     */
+    var topHeight=140;//头部高度
+    var footerHeight=191;//底部高度
+    var contentMinHeight = $(window).height()-topHeight-footerHeight;
+    $(".about").css("min-height",contentMinHeight)
+    $(window).resize(function(){
+        var contentMinHeight = $(window).height()-topHeight-footerHeight;
+        $(".rightGrid").css("min-height",contentMinHeight)
+    })
+</script>
+</body>
+
+</html>

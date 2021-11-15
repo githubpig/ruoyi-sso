@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysBugMapper">
+
+    <resultMap type="SysBug" id="SysBugResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="bugPlace"    column="bug_place"    />
+        <result property="version"    column="version"    />
+        <result property="description"    column="description"    />
+        <result property="imgs"    column="imgs"    />
+        <result property="detail"    column="detail"    />
+        <result property="auditState"    column="audit_state"    />
+        <result property="score"    column="score"    />
+        <result property="auditDesc"    column="audit_desc"    />
+        <result property="auditTime"    column="audit_time"    />
+        <result property="auditUserId"    column="audit_user_id"    />
+        <result property="auditUserName"    column="audit_user_name"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectSysBugVo">
+        select id, user_id, user_name, bug_place, version, description, imgs, detail, audit_state,score, audit_desc, audit_time, audit_user_id, audit_user_name, create_time from sys_bug
+    </sql>
+
+    <select id="selectSysBugList" parameterType="SysBug" resultMap="SysBugResult">
+        <include refid="selectSysBugVo"/>
+        <where>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="bugPlace != null  and bugPlace != ''"> and bug_place = #{bugPlace}</if>
+            <if test="version != null  and version != ''"> and version = #{version}</if>
+            <if test="auditState != null "> and audit_state = #{auditState}</if>
+        </where>
+    </select>
+
+    <select id="selectSysBugById" parameterType="Long" resultMap="SysBugResult">
+        <include refid="selectSysBugVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysBug" parameterType="SysBug" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_bug
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="bugPlace != null">bug_place,</if>
+            <if test="version != null">version,</if>
+            <if test="description != null">description,</if>
+            <if test="imgs != null">imgs,</if>
+            <if test="detail != null">detail,</if>
+            <if test="auditState != null">audit_state,</if>
+            <if test="score != null">score,</if>
+            <if test="auditDesc != null">audit_desc,</if>
+            <if test="auditTime != null">audit_time,</if>
+            <if test="auditUserId != null">audit_user_id,</if>
+            <if test="auditUserName != null">audit_user_name,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="bugPlace != null">#{bugPlace},</if>
+            <if test="version != null">#{version},</if>
+            <if test="description != null">#{description},</if>
+            <if test="imgs != null">#{imgs},</if>
+            <if test="detail != null">#{detail},</if>
+            <if test="auditState != null">#{auditState},</if>
+            <if test="score != null">#{score},</if>
+            <if test="auditDesc != null">#{auditDesc},</if>
+            <if test="auditTime != null">#{auditTime},</if>
+            <if test="auditUserId != null">#{auditUserId},</if>
+            <if test="auditUserName != null">#{auditUserName},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysBug" parameterType="SysBug">
+        update sys_bug
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="bugPlace != null">bug_place = #{bugPlace},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="imgs != null">imgs = #{imgs},</if>
+            <if test="detail != null">detail = #{detail},</if>
+            <if test="auditState != null">audit_state = #{auditState},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="auditDesc != null">audit_desc = #{auditDesc},</if>
+            <if test="auditTime != null">audit_time = #{auditTime},</if>
+            <if test="auditUserId != null">audit_user_id = #{auditUserId},</if>
+            <if test="auditUserName != null">audit_user_name = #{auditUserName},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysBugById" parameterType="Long">
+        delete from sys_bug where id = #{id}
+    </delete>
+
+    <delete id="deleteSysBugByIds" parameterType="String">
+        delete from sys_bug where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

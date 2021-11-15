@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" th:content="${@config.getKey('blog.index.keywords')}">
+	<meta name="description" th:content="${@config.getKey('blog.index.description')}">
+	<title th:text="${@config.getKey('blog.index.title')}"></title>
+
+	<link rel="stylesheet" th:href="@{/blog/jxhx/css/base.css}" />
+	<link rel="stylesheet" th:href="@{/blog/jxhx/css/m.css}" />
+	<link rel="stylesheet" th:href="@{/ajax/libs/font-icon/icon.css}"/>
+	<script th:src="@{/blog/jxhx/js/jquery-1.8.3.min.js}"></script>
+	<script th:src="@{/blog/jxhx/js/comm.js}"></script>
+	<script th:inline="javascript"> var ctx = [[@{/}]]; </script>
+	<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+<style>
+	.xiangce_list ul li{
+		/*width: 30%;*/
+		float: left;
+		overflow: hidden;
+		margin: 10px;
+	}
+	/*.xiangce_list li {
+		margin: 10px;
+	}*/
+	.xiangce_list li a {
+		margin: 0 0 30px 0;
+		padding: 12px;
+		background: white;
+		border-radius: 3px;
+		box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+		display: block;
+	}
+	.xiangce_list li img {
+		width: 100%;
+		margin: 0 auto 10px;
+	}
+	.xiangce_list li p {
+		color: #666;
+		text-align: center;
+	}
+
+	.xiangce_list ul li img{
+		width: 260px;
+		height: 330px;
+		margin: 10px 0px;
+	}
+	.xiangce_list ul li p{
+		width: 260px;
+	}
+	.xiangce_list ul li:hover {-webkit-transform:translateY(-6px);-moz-transform:translateY(-6px);-ms-transform:translateY(-6px);
+		     -o-transform:translateY(-6px);transform:translateY(-6px)}
+</style>
+</head>
+<body>
+<div th:replace="blog/theme/jxhx/fragments/navbar"></div>
+
+<article>
+	<div class="whitebg timebox" style="background-color: #ddd;">
+
+		<h2 class="htitle">相册</h2>
+		<div class="xiangce_list">
+			<ul id="list" style="margin-left: 105px;">
+
+				<li th:each="item:${albumList}">
+					<a th:href="@{'/blog/selectAlbumMaterialList?pageSize=20&albumId='+${item.albumId}}"><img th:src="${item.coverImage}" th:title="${item.albumName}">
+						<p th:text="${item.albumName}"></p>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="clear"></div>
+
+		<div id="pageGroup">
+			<span class="pageinfo">共<strong>[[${totalPages}]]</strong>页<strong>[[${total}]]</strong>条记录</span>
+			<a th:href="@{'/blog/albums?pageSize=6'}" class="homepage">首页</a>
+			<a th:if="${hasPrevious}" th:href="@{'/blog/albums?pageNum='+${prePage}+'&pageSize=6'}"  class="prepage">上页</a>
+			<a  th:each="item:${navNums}" class="listpage"  th:href="@{'/blog/albums?pageNum='+${item}+'&pageSize=6'}"  th:text="${item}" th:classappend="${item+'' ==currentPage+'' ? 'curpage':''}"></a>
+			<a th:if="${hasNext}" th:href="@{'/blog/albums/?pageNum='+${nextPage}+'&pageSize=6'}"  class="nextpage">下页</a>
+			<a th:href="@{'/blog/albums?pageNum='+${totalPages}+'&pageSize=6'}"  class="endpage">尾页</a>
+		</div>
+
+	</div>
+</article>
+<div th:replace="blog/theme/jxhx/fragments/footer"></div>
+
+<script>
+    /*加载底部前执行。ps：防止闪现
+     控制当页面内容过少时，底部仍在屏幕最下方
+     主体内容最小高度
+     */
+    var topHeight=160;//头部高度
+    var footerHeight=191;//底部高度
+    var contentMinHeight = $(window).height()-topHeight-footerHeight;
+    $(".timebox").css("min-height",contentMinHeight)
+    $(window).resize(function(){
+        var contentMinHeight = $(window).height()-topHeight-footerHeight;
+        $(".rightGrid").css("min-height",contentMinHeight)
+    })
+</script>
+
+</body>
+
+</html>

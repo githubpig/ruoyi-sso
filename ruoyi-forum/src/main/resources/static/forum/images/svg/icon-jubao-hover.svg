@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="13px" viewBox="0 0 14 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/举报hover</title>
+    <g id="20210305_4.5优化" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="作品详情页_举报优化" transform="translate(-1015.000000, -646.000000)">
+            <g id="分组-8" transform="translate(1012.000000, 642.000000)">
+                <g id="jubaoqian" transform="translate(3.000000, 4.000000)">
+                    <path d="M0.4,9.9 L5.4,1.2 C6.1,1.00086606e-13 7.9,1.00086606e-13 8.6,1.2 L13.6,9.9 C14.3,11.1 13.4,12.6 12,12.6 L2,12.6 C0.6,12.7 -0.3,11.1 0.4,9.9 L0.4,9.9 Z" id="合并形状" fill="#F4523B"></path>
+                    <path d="M6.2,7.4 L6,4.01074024 C6,3.51074024 6.4,3.01074024 7,3.01074024 C7.6,3.01074024 8,3.41074024 8,4.01074024 L7.8,7.4 C7.8,8 7.47493095,8.4 7,8.4 C6.56092359,8.4 6.2,8 6.2,7.4 Z" id="XMLID_1748_" fill="#FFFFFF"></path>
+                    <circle id="XMLID_1749_" fill="#FFFFFF" cx="7" cy="10.2" r="1"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

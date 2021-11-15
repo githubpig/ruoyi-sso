@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+    "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.plugs.thirdlogin.mapper.ThirdOauthMapper">
+
+	<resultMap type="ThirdOauth" id="ThirdOauthResult">
+		<result property="id"    column="id"    />
+		<result property="userId"    column="user_id"    />
+		<result property="openid"    column="openid"    />
+		<result property="loginType"    column="login_type"    />
+		<result property="accessToken"    column="access_token"    />
+		<result property="bindTime"    column="bind_time"    />
+	</resultMap>
+
+	<select id="selectThirdOauthList" parameterType="ThirdOauth" resultMap="ThirdOauthResult">
+		select * from sys_third_oauth
+		<where>
+			<if test="userId != null  and userId != ''">  and user_id = #{userId}</if>
+			<if test="openid != null  and openid != ''"> and openid = #{openid}</if>
+			<if test="loginType != null  and loginType != ''"> and login_type = #{loginType}</if>
+		</where>
+	</select>
+
+	<insert id="insertThirdOauth" parameterType="ThirdOauth" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_third_oauth
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null">user_id,</if>
+			<if test="openid != null">openid,</if>
+			<if test="loginType != null">login_type,</if>
+			<if test="accessToken != null">access_token,</if>
+			<if test="bindTime != null">bind_time,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null">#{userId},</if>
+			<if test="openid != null">#{openid},</if>
+			<if test="loginType != null">#{loginType},</if>
+			<if test="accessToken != null">#{accessToken},</if>
+			<if test="bindTime != null">#{bindTime},</if>
+		</trim>
+	</insert>
+
+	<update id="updateThirdOauth" parameterType="ThirdOauth">
+		update sys_third_oauth
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="userId != null">user_id = #{userId},</if>
+			<if test="openid != null">openid = #{openid},</if>
+			<if test="loginType != null">login_type = #{loginType},</if>
+			<if test="accessToken != null">access_token = #{accessToken},</if>
+			<if test="bindTime != null">bind_time = #{bindTime},</if>
+		</trim>
+		where id = #{id}
+	</update>
+
+	<delete id="deleteThirdOauthByUserIdAndLoginType" parameterType="String">
+        delete from sys_third_oauth where user_id = #{userId} and login_type =#{loginType}
+    </delete>
+
+</mapper>

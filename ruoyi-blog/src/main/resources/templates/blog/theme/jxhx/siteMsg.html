@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" th:content="${@config.getKey('blog.index.keywords')}">
+    <meta name="description" th:content="${@config.getKey('blog.index.description')}">
+    <title th:text="${@config.getKey('blog.index.title')}"></title>
+
+    <link rel="stylesheet" th:href="@{/blog/jxhx/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/blog/jxhx/css/m.css}" />
+    <link rel="stylesheet" th:href="@{/ajax/libs/font-icon/icon.css}"/>
+    <script th:src="@{/blog/jxhx/js/jquery-1.8.3.min.js}"></script>
+    <script th:src="@{/blog/jxhx/js/comm.js}"></script>
+    <script th:inline="javascript"> var ctx = [[@{/}]]; </script>
+    <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+    <style>
+
+        /*评论*/
+        .commentGrid{ margin-bottom:20px;}
+        .commentGrid .commentForm{ margin-bottom:30px;}
+        .commentGrid .commentTextarea{ padding:10px 15px; font-size:14px; color:#333; line-height:18px; background:#f6f6f6; border-radius:4px; border:1px solid #ddd; width: calc(100% - 30px); min-height:80px; margin-bottom:10px;}
+        .commentGrid .commentTextarea.reply{ background:#fff; margin-top:20px;}
+        .commentGrid .btnBox{ text-align:right;}
+        .commentGrid .submitBtn{float:right; display: inline-block; width:110px; height:36px; cursor:pointer; line-height:36px; text-align:center; color:#fff; font-size:14px; border-radius:18px; background:#409eff;}
+        .commentGrid .submitBtn:hover{ opacity:.8;}
+
+        .commentGrid .commentList{ padding-top:20px;}
+        .commentGrid .commentList .title{ border-bottom:1px solid #eee; padding-bottom:10px; margin-bottom:20px; font-size:14px; color:#666;}
+        .commentGrid .commentList .tips{text-align:center; font-size:14px; color:#999; padding:30px;}
+        .commentGrid .commentGroup{ padding:15px 20px; border-left: 3px solid #ddd; background: #f6f6f6;}
+        .commentGrid .commentGroup .detailText{ line-height:20px;}
+        .commentGrid .commentGroup .adminText{ margin-top:10px; line-height:20px;}
+        .commentGrid .itemUl{}
+        .commentGrid .item{ margin-bottom:20px; padding-bottom:20px; border-bottom:1px dashed #ddd;}
+        .commentGrid .username{ font-size:15px; color:#333; line-height:24px; margin-bottom:10px;}
+        .commentGrid .username span{ font-size:12px; color:#999; margin-left:5px;}
+        .commentGrid .username .reply{ float:right; font-size:12px; color:#999;}
+
+        .commentGrid .moreBtn{ display:block; height:40px; cursor:pointer; border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; border:1px solid #409eff; color:#409eff; font-size:14px; text-align:center; line-height:38px; transition:all .2s ease;}
+        .commentGrid .moreBtn:hover{ background:#409eff; color:#fff; opacity:.9; transition:all .2s ease;}
+
+        .commentGrid .submitBtn:hover {
+            opacity: .8;
+        }
+
+        .commentGrid .submitBtn {
+            display: inline-block;
+            width: 110px;
+            height: 36px;
+            cursor: pointer;
+            line-height: 36px;
+            text-align: center;
+            color: #fff;
+            font-size: 14px;
+            border-radius: 18px;
+            background: #409eff;
+        }
+
+        .commentGrid .commentList {
+            padding-top: 20px;
+        }
+        .comment-more, .no-comment {
+            padding: 5px;
+            text-align: center;
+            background: #f5f5f5;
+            color: #bbb;
+            border-radius: 4px;
+        }
+
+        .commentGrid .commentList {
+            padding-top: 20px;
+        }
+        .comment li {
+            padding: 10px 0;
+            border-bottom: 1px dashed #e5e5e5;
+        }
+        .comment-body .comment-user-img {
+            float: left;
+        }
+        .comment-body .comment-user-img>img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+        }
+        .comment-body .comment-info {
+            margin-left: 55px;
+        }
+        .comment-body .comment-info .comment-time {
+            float: right;
+            color: #c0c0c0;
+        }
+        .comment-body .comment-info .comment-content {
+            color: #566573;
+            margin-top: 5px;
+        }
+        .comment-body .comment-info .comment-footer {
+            color: #999;
+            text-align: right;
+        }
+        .comment-body .comment-info .reply, .comment-body .comment-info .cancel-reply {
+            cursor: pointer;
+        }
+        .comment-body .comment-parent .comment-parent-content {
+            padding: 5px 10px;
+            background: #eeeeee;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        .guestBookGroup .inputLabel {
+            margin-bottom: 15px;
+            position: relative;
+            border: 1px solid #ddd;
+            background: #fff;
+            font-size: 12px;
+            border-radius: 5px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            overflow: hidden;
+            color: #333;
+        }
+        .guestBookGroup .inputBlock, .guestBookGroup .textareaBlock {
+            display: block;
+            width: 100%;
+            /*height: 40px;*/
+            line-height: 20px;
+            padding: 10px 15px;
+            background: none;
+            border: 0;
+        }
+        .comment .user-name-content {
+            margin-bottom: 10px;
+            display: none;
+            cursor: pointer;
+        }
+
+    </style>
+    <script>
+        var tid=-1;
+        var comment_type="liuyan";
+    </script>
+    <script  th:src="@{/blog/jxhx/js/comment.js}"></script>
+</head>
+<body>
+<div th:replace="blog/theme/jxhx/fragments/navbar"></div>
+
+<article>
+    <!--lbox begin-->
+    <div class="lbox">
+
+        <div class="whitebg bloglist">
+            <h2 class="htitle">留言板</h2>
+
+            <form id="comment-form" class="form-horizontal commentGrid mt-10 comment guestBookGroup">
+                <input   name="tid" type="hidden" value="-1">
+                <input   name="type" type="hidden" value="liuyan">
+                <div id="user-name-content" class="user-name-content">欢迎您：<b id="user-name"></b></div>
+                <div class="guestBookGroup" id="user-info" style="display: none;padding: 0;">
+
+                    <div class="inputLabel" style="width: 30%;float:left;margin-right:38px;">
+                        <input id="nickname" type="text" class="inputBlock"  name="userName" placeholder="昵称(必填)">
+                    </div>
+                    <div class="inputLabel" style="width: 30%;float:left;margin-right: 38px;">
+                        <input id="qq" type="text" class="inputBlock"  name="qq" placeholder="QQ（可获取头像和昵称）">
+                    </div>
+                    <div class="inputLabel" style="width: 30%;float:left;">
+                        <input id="email" type="text" class="inputBlock"  name="email" placeholder="邮箱">
+                    </div>
+                </div>
+
+                <textarea id="comment-textarea" style="background: #fff;" class="commentTextarea"  name="content" placeholder="我来说两句~"></textarea>
+                <input type="button" id="submitCommentBtn" name="dosubmit" value="提交留言" class="submitBtn"/>
+
+            </form>
+
+            <div class="commentGrid" style="padding: 0 10px;margin-top: 53px;border-top: 1px solid#eeeeee;">
+                <ul class="itemUl comment" id="commentList">
+
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="rbox">
+        <div th:replace="blog/theme/jxhx/fragments/sidebar"></div>
+    </div>
+</article>
+<div th:replace="blog/theme/jxhx/fragments/footer"></div>
+
+<script type="text/javascript">
+    function check(){
+        if(document.guest.title.value==""){
+            layer.msg("留言主题不能为空！");
+            return false;
+        }
+        if(document.guest.name.value==""){
+            layer.msg("请填写您的昵称！");
+            return false;
+        }
+        if(document.guest.bookmsg.value==""){
+            layer.msg("请填写留言内容！");
+            return false;
+        }
+        if(document.guest.code.value==""){
+            layer.msg("请填写验证码！");
+            return false;
+        }
+        return true;
+    }
+</script>
+
+</body>
+
+</html>

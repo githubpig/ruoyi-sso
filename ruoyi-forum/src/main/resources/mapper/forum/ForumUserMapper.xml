@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.forum.mapper.ForumUserMapper">
+
+	<resultMap type="SysUser" id="SysUserResult">
+		<id property="userId"       column="user_id"      />
+		<result property="deptId"       column="dept_id"      />
+		<result property="loginName"    column="login_name"   />
+		<result property="userName"     column="user_name"    />
+		<result property="userType"     column="user_type"    />
+		<result property="email"        column="email"        />
+		<result property="phonenumber"  column="phonenumber"  />
+		<result property="description"          column="description"          />
+		<result property="emailFlag"          column="email_flag"          />
+		<result property="phoneFlag"          column="phone_flag"          />
+		<result property="score"          column="score"          />
+		<result property="sex"          column="sex"          />
+		<result property="avatar"       column="avatar"       />
+		<result property="password"     column="password"     />
+		<result property="salt"         column="salt"         />
+		<result property="status"       column="status"       />
+		<result property="delFlag"      column="del_flag"     />
+		<result property="loginIp"      column="login_ip"     />
+		<result property="loginDate"    column="login_date"   />
+		<result property="createBy"     column="create_by"    />
+		<result property="createTime"   column="create_time"  />
+		<result property="updateBy"     column="update_by"    />
+		<result property="updateTime"   column="update_time"  />
+		<result property="remark"       column="remark"       />
+		<result property="lastLoginTime"       column="last_login_time"       />
+	</resultMap>
+	<resultMap type="ForumUser" id="ForumUserResult">
+		<id property="userId"       column="user_id"      />
+		<result property="homeCity"       column="home_city"      />
+		<result property="nowCity"    column="now_city"   />
+		<result property="job"     column="job"    />
+		<result property="highSchool"        column="high_school"        />
+		<result property="qq"  column="qq"  />
+		<result property="qqPrivate"          column="qq_private"          />
+		<result property="wx"          column="wx"          />
+		<result property="wxPrivate"          column="wx_private"          />
+		<result property="weibo"          column="weibo"          />
+		<result property="website"          column="website"          />
+		<result property="look"       column="look"       />
+		<result property="link1"     column="link1"     />
+		<result property="link2"         column="link2"         />
+		<result property="link3"       column="link3"       />
+		<result property="link4"      column="link4"     />
+		<result property="label"      column="label"     />
+		<result property="birthday"    column="birthday"   />
+		<result property="height"     column="height"    />
+		<result property="weight"   column="weight"  />
+		<result property="education"     column="education"    />
+		<result property="marriage"   column="marriage"  />
+		<result property="minzhu"       column="minzhu"       />
+		<result property="xingzuo"       column="xingzuo"       />
+		<result property="xuexing"       column="xuexing"       />
+		<result property="shuxiang"       column="shuxiang"       />
+		<result property="children"       column="children"       />
+		<result property="salary"       column="salary"       />
+		<result property="interest"       column="interest"       />
+		<result property="interest_others"       column="interest_others"       />
+		<result property="real_name"       column="real_name"       />
+		<result property="id_card"       column="id_card"       />
+		<result property="id_card_file"       column="id_card_file"       />
+		<result property="id_card_file2"       column="id_card_file2"       />
+		<result property="id_card_read"       column="id_card_read"       />
+		<result property="id_card_read_his"       column="id_card_read_his"       />
+
+
+		<result property="deptId"       column="dept_id"      />
+		<result property="loginName"    column="login_name"   />
+		<result property="userName"     column="user_name"    />
+		<result property="userType"     column="user_type"    />
+		<result property="email"        column="email"        />
+		<result property="phonenumber"  column="phonenumber"  />
+		<result property="description"          column="description"          />
+		<result property="emailFlag"          column="email_flag"          />
+		<result property="phoneFlag"          column="phone_flag"          />
+		<result property="score"          column="score"          />
+		<result property="sex"          column="sex"          />
+		<result property="avatar"       column="avatar"       />
+		<result property="password"     column="password"     />
+		<result property="salt"         column="salt"         />
+		<result property="status"       column="status"       />
+		<result property="delFlag"      column="del_flag"     />
+		<result property="loginIp"      column="login_ip"     />
+		<result property="loginDate"    column="login_date"   />
+		<result property="createBy"     column="create_by"    />
+		<result property="createTime"   column="create_time"  />
+		<result property="updateBy"     column="update_by"    />
+		<result property="updateTime"   column="update_time"  />
+		<result property="remark"       column="remark"       />
+		<result property="lastLoginTime"       column="last_login_time"       />
+
+		<result property="visitTime"       column="visit_time"       />
+
+	</resultMap>
+
+	<select id="selectByUserId" parameterType="Long" resultMap="ForumUserResult">
+		select * from forum_user
+		where user_id = #{userId}
+	</select>
+	<insert id="insertNewForumUser" parameterType="Integer">
+		insert into forum_user (user_id)
+		values (#{userId})
+	</insert>
+	<update id="updateUserInfo" parameterType="ForumUser">
+		update forum_user
+		<set>
+			<if test="homeCity != null and homeCity != ''">home_city = #{homeCity},</if>
+			<if test="nowCity != null and nowCity != ''">now_city = #{nowCity},</if>
+			<if test="job != null and job != ''">job = #{job},</if>
+			high_school = #{highSchool},
+			<if test="qq != null and qq != ''">qq = #{qq},</if>
+			<if test="qqPrivate != null and qqPrivate != ''">qq_private = #{qqPrivate},</if>
+			<if test="wx != null and wx != ''">wx = #{wx},</if>
+			<if test="wxPrivate != null and wxPrivate != ''">wx_private = #{wxPrivate},</if>
+			<if test="weibo != null and weibo != ''">weibo = #{weibo},</if>
+			<if test="website != null and website != ''">website = #{website},</if>
+			<if test="look != null and look != ''">look = #{look},</if>
+			<if test="link1 != null and link1 != ''">link1 = #{link1},</if>
+			<if test="link2 != null and link2 != ''">link2 = #{link2},</if>
+			<if test="link3 != null and link3 != ''">link3 = #{link3},</if>
+			<if test="link4 != null and link4 != ''">link4 = #{link4},</if>
+			<if test="label != null and label != ''">label = #{label},</if>
+			<if test="birthday != null and birthday != ''">birthday = #{birthday},</if>
+			<if test="height != null and height != ''">height = #{height},</if>
+			<if test="weight != null and weight != ''">weight = #{weight},</if>
+			<if test="education != null and education != ''">education = #{education},</if>
+			<if test="marriage != null and marriage != ''">marriage = #{marriage},</if>
+			<if test="minzhu != null and minzhu != ''">minzhu = #{minzhu},</if>
+			<if test="xingzuo != null and xingzuo != ''">xingzuo = #{xingzuo},</if>
+			<if test="xuexing != null and xuexing != ''">xuexing = #{xuexing},</if>
+			<if test="shuxiang != null and shuxiang != ''">shuxiang = #{shuxiang},</if>
+			<if test="children != null and children != ''">children = #{children},</if>
+			<if test="salary != null and salary != ''">salary = #{salary},</if>
+			<if test="interest != null and interest != ''">interest = #{interest},</if>
+			<if test="interest_others != null">interest_others = #{interest_others},</if>
+			<if test="real_name != null and real_name != ''">real_name = #{real_name},</if>
+			<if test="id_card != null and id_card != ''">id_card = #{id_card},</if>
+			<if test="id_card_file != null">id_card_file = #{id_card_file},</if>
+			<if test="id_card_file2 != null">id_card_file2 = #{id_card_file2},</if>
+			<if test="id_card_read != null">id_card_read = #{id_card_read},</if>
+			<if test="id_card_read_his != null">id_card_read_his = #{id_card_read_his},</if>
+		</set>
+		where user_id = #{userId}
+	</update>
+
+	<!--签到 start-->
+	<resultMap type="ForumUserSign" id="ForumUserSignResult">
+		<id property="id"       column="id"      />
+		<result property="userId"       column="user_id"      />
+		<result property="count"    column="count"   />
+		<result property="signTime"     column="sign_time"    />
+	</resultMap>
+
+	<select id="selectUserSign" parameterType="Integer" resultMap="ForumUserSignResult">
+		select * from forum_sign
+		where user_id = #{userId}
+	</select>
+	<insert id="insertUserSign" parameterType="ForumUserSign">
+		insert into forum_sign (user_id,count,sign_time)
+		values (#{userId},#{count},now())
+	</insert>
+
+	<update id="updateUserSign" parameterType="ForumUserSign">
+		update forum_sign
+		set count = #{count},sign_time=now()
+		where id = #{id}
+	</update>
+	<!--签到 end-->
+
+	<!--关注用户 start-->
+	<select id="selectMyFocusList" parameterType="String" resultMap="ForumUserResult">
+		select a.*,b.* from sys_user a LEFT JOIN forum_user b on a.user_id=b.user_id
+		where a.user_id in(
+		   select focus_user_id from forum_focus_user where  yhid  = #{yhid}
+		)
+    </select>
+
+	<insert id="addFocus" parameterType="String">
+      insert into forum_focus_user values (#{yhid},#{focus_user_id},now())
+    </insert>
+
+	<delete id="removeFocus" parameterType="String">
+        delete from forum_focus_user where yhid =#{yhid} and focus_user_id=#{focus_user_id}
+    </delete>
+
+	<select id="selectFocusFlag" parameterType="String" resultType="Integer">
+      select count(1) from forum_focus_user where yhid=#{yhid} and focus_user_id=#{focus_user_id}
+    </select>
+	<!--关注用户 end-->
+	<!--我的粉丝-->
+	<select id="selectMyFansList" parameterType="String" resultMap="ForumUserResult">
+		select a.*,b.* from sys_user a LEFT JOIN forum_user b on a.user_id=b.user_id
+		where a.user_id in(
+		   select yhid from forum_focus_user where  focus_user_id  = #{focus_user_id}
+		)
+    </select>
+
+	<!--我的粉丝-->
+	<select id="selectFansCount" parameterType="String" resultType="Integer">
+		select count(1) from forum_focus_user where focus_user_id=#{focus_user_id}
+    </select>
+	<!--增加访客记录-->
+	<insert id="addVisitUser" parameterType="String">
+      insert into forum_visit_user values (#{userId},#{visit_user_id},now())
+    </insert>
+
+	<delete id="removeVisitUser" parameterType="String">
+        delete from forum_visit_user where user_id =#{userId} and visit_user_id=#{visit_user_id}
+    </delete>
+
+	<select id="selectVisitUsers" parameterType="String" resultMap="ForumUserResult">
+		select * from
+		sys_user a  LEFT JOIN
+		forum_user b on a.user_id = b.user_id,
+		(select visit_user_id,visit_time
+		from forum_visit_user
+		where user_id =#{userId}
+		) c
+		where a.user_id=c.visit_user_id
+		order by c.visit_time desc
+    </select>
+
+	<select id="selectActivityUsers"  resultMap="SysUserResult">
+		select *
+		from sys_user
+		ORDER BY score DESC
+		limit 6
+    </select>
+
+	<insert id="insertDownloadHis" parameterType="String">
+		insert into forum_download_his (user_id,url)
+		values (#{userId},#{url})
+	</insert>
+	<select id="selectDownloadHisCount"  resultType="int">
+		select count(1)
+		from forum_download_his
+		where user_id = #{userId} and url = #{url}
+    </select>
+</mapper> 

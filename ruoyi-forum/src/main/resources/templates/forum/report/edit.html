@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改举报信息')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-report-edit" th:object="${forumReport}">
+            <input id="id" name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">模块：</label>
+                <div class="col-sm-8">
+                    <input name="module" id="module" disabled th:field="*{module}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">举报类型：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('report_type')}">
+                        <input disabled type="radio" th:id="${'reportType_' + dict.dictCode}" name="reportType" th:value="${dict.dictValue}" th:field="*{reportType}">
+                        <label  th:for="${'reportType_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">被举报目标id：</label>
+                <div class="col-sm-8">
+                    <input name="targetId" id="targetId" disabled th:field="*{targetId}" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">预览：</label>
+                <div class="col-sm-8">
+                    <a style="margin-top: 8px;display: inline-block;" th:if="${forumReport.module=='question'}" target="_blank" th:href="@{'/forum/question/questionDetail/'+${forumReport.targetId}}">预览</a>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">处理：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('forum_report_deal_type')}">
+                        <input type="radio" th:id="${'available_' + dict.dictCode}" name="available" th:value="${dict.dictValue}" th:checked="${dict.default}">
+                        <label th:for="${'available_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">信息：</label>
+                <div class="col-sm-8">
+                    <textarea id="message" name="message" rows="5" class="form-control">[[*{message}]]</textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+
+    <script th:inline="javascript">
+        var prefix = ctx + "forum/report";
+        $("#form-report-edit").validate({
+            focusCleanup: true
+        });
+        function dealCallback(id,message) {
+            $.ajax({
+                type: 'post',
+                url:ctx+ 'forum/report/dealForumReport',
+                data:{"id":id,"message":message},
+                dataType: 'json',
+                success: function(data){
+                    if(data.code==0){
+                        $.operate.successCallback(data);
+                    }else{
+                        $.modal.alertError(data.msg);
+                    }
+                },
+                error:function(data) {
+                    console.log(data);
+                },
+            });
+        }
+        function submitHandler() {
+           /* if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-report-edit').serialize());
+            }*/
+            var available=$("input[name='available']:checked").val();
+            var module=$("#module").val();
+            if(module=='question'){
+                if(available==2){//删除帖子
+                    $.ajax({
+                        type: 'post',
+                        url:ctx+ 'forum/question/remove',
+                        data:{"ids":$("#targetId").val()},
+
+                        dataType: 'json',
+                       /* beforeSend: function () {
+                            $.modal.loading("正在处理中，请稍后...");
+                            $.modal.disable();
+                        },*/
+                        success: function(data){
+                            if(data.code==0){
+                                var id=$("#id").val();
+                                var message=$("#message").val();
+                                dealCallback(id,message);
+
+                            }else{
+                                $.modal.alertError(data.msg);
+                            }
+                        },
+                        error:function(data) {
+                            console.log(data);
+                        },
+                    });
+                }
+                if(available==1||available==0){
+                    $.ajax({
+                        type: 'post',
+                        url:ctx+ 'forum/question/updateAvailable',
+                        data:{"id":$("#targetId").val(),"available":available},
+                        dataType: 'json',
+                        beforeSend: function () {
+                            $.modal.loading("正在处理中，请稍后...");
+                            $.modal.disable();
+                        },
+                        success: function(data){
+                            if(data.code==0){
+                                var id=$("#id").val();
+                                var message=$("#message").val();
+                                dealCallback(id,message);
+                            }else{
+                                $.modal.alertError(data.msg);
+                            }
+
+                        },
+                        error:function(data) {
+                            console.log(data);
+                        },
+                    });
+                }
+            }
+
+        }
+    </script>
+</body>
+</html>

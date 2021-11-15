@@ -1,0 +1,48 @@
+<div class="yzm_list_section">
+    <strong>发布见解</strong>
+    <div class="yzm_release">
+        <a onclick="openAddQuestion()" target="_blank">发 帖</a>
+    </div>
+</div>
+<div class="yzm_list_section">
+    <strong>活跃用户</strong>
+    <dl class="yzm_lately">
+        <dd  th:each="item:${@forum.selectActivityUsers()}" >
+            <a th:href="@{'/forum/u/'+${item.userId}}" target="_blank">
+                <img  th:src="${item.avatar}"><cite>[[${item.userName}]]</cite><i>贴子数[[${item.questionCount}]]</i>
+            </a>
+        </dd>
+    </dl>
+</div>
+
+<div class="yzm_list_section ">
+    <strong>标签云</strong>
+    <!--<div class="yzm_entrance yzm_blue_btn">
+        <a href="https://www.yzmask.com/show/8.html" target="_blank">YzmCMS插件集合</a>
+    </div>
+    <div class="yzm_entrance">
+        <a href="https://www.yzmask.com/questionnaire/index.html" target="_blank">调查问卷</a>
+    </div>-->
+    <div class="cloud">
+        <ul>
+            <li>
+                <a  style="height: auto;font-size: 15px;" th:each="item:${@forum.getForumTagsCloud()}"   th:href="@{${'/forum/tag/'+item.tagId+'?pageSize=10'}}" th:text="${item.tagName+'('+item.count+')'}"></a>
+            </li>
+        </ul>
+    </div>
+    <div style="clear:both"></div>
+
+</div>
+
+<div class="yzm_list_section" style="padding-bottom:0px">
+    <a href="https://www.aliyun.com/minisite/goods?userCode=fe519vxk" target="_blank" rel="nofollow"><img src="https://www.yzmask.com/common/static/images/aliyun.jpg" width="350"></a>
+</div>
+
+<div class="yzm_list_section">
+    <strong>友情链接</strong>
+    <ul class="yzm_link">
+
+        <li th:each="item:${@cms.getFriendLinks()}"> <a th:href="${item.link}" th:text="${item.name}" target="_blank"></a></li>
+
+    </ul>
+</div>

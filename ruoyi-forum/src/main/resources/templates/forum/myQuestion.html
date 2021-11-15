@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>我的帖子</title>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
+    <link rel="stylesheet" href="/forum/css/main.min.css">
+    <link rel="bookmark" type="image/x-icon" href="forum/images/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/forum/images/favicon.ico">
+    <link rel="stylesheet" href="/forum/css/personalProfile.css">
+    <link rel="stylesheet" href="/forum/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="/forum/css/mystyle.css">
+    <script type="text/javascript" src="/forum/lib/jquery.min.js"></script>
+    <style>
+        .laypage_main a{width:auto;}
+    </style>
+</head>
+<body>
+<div id="body">
+
+    <div th:replace="forum/header"></div>
+    <!--*******************************-->
+    <main class="main-wrapper">
+        <div class="container-area">
+            <div class="container-area-left">
+                <div class="card-media personal-card">
+                    <div class="avatar-container-80 z-center">
+                        <a th:href="@{'/forum/u/'+${userId}}" th:title="${userName}" class="author-avatar" target="_blank" z-st="user_card_1_face">
+                            <img th:src="${avatar}" width="80" height="80" th:title="${userName}" alt="">
+                        </a>
+
+                    </div>
+                    <div class="presonal-info">
+                        <a th:href="@{'/forum/u/'+${userId}}" class="author-name" target="_blank"
+                           th:title="${userName}" z-st="user_card_1_name" th:text="${userName}"></a>
+                    </div>
+                    <div class="position-info">
+                            <!--<span title="淄博 | 手工艺人">xx&nbsp;|
+                              xxxx
+                            </span>-->
+                    </div>
+                    <div class="btn-area">
+                        <a href="/uploadQuestion"  class="btn-default-main card-media-mid-btn js-upload">发 帖</a><br />
+                        <!--<a href="https://contributor.hellorf.com/" target="_blank" class="btn-default-secondary card-media-mid-btn mt-10">帮你的创作变现</a>-->
+                    </div>
+
+                </div>
+                <div class="card-media personal-menu">
+
+                    <ul class="menu-list">
+                        <li class="menu-list-default ">
+                            <i></i><a href="/setting" id="left-data-account-focus">资料与账号</a></li>
+                    </ul>
+
+                    <ul class="menu-list">
+                        <li class="menu-list-default current"><i></i>
+                            <a href="/myQuestion" id="usercenter-menu-focus-left">我的帖子
+                            </a>
+                        </li>
+                        <li class="menu-list-default ">
+                            <i></i><a href="/myFocus">我的关注</a></li>
+                        <li class="menu-list-default ">
+                            <i></i><a href="/myFavourite">我的收藏</a></li>
+                    </ul>
+                    <ul class="menu-list">
+
+                        <li class="menu-list-default ">
+                            <i></i><a href="/myIn" >财务中心</a></li>
+                    </ul>
+
+                </div>
+                <!-- 消息列表左侧zhan广告 -->
+                <!--<div class="ad-media-list">
+                    <a href="https://www.hellorf.com/?utm_source=zcool&utm_medium=setting&utm_campaign=menu&utm_content=img" target="_blank"><img src="//static.zcool.cn/git_z/z/images/hellorf-ad.png" alt="海洛品牌广告" /></a>
+                </div>-->
+            </div>
+
+            <div class="container-area-right">
+                <div class="bg-box-radius">
+
+                    <div class="tab-menu border-bottom">
+                        <ul class="tab-box">
+                            <li  class="current" ><a>我的帖子</a></li>
+                        </ul>
+                    </div>
+
+
+                    <div class="datum-item-box border-bottom">
+                        <table class="layui-table" lay-skin="line">
+                            <colgroup>
+                                <col width="26.666%">
+                                <!--<col width="6.666%">-->
+                                <col width="16.666%">
+                                <col width="23.332%">
+                                <col width="8.666%">
+                                <col width="16.666%">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>标题</th>
+                                <!--<th>评论</th>-->
+                                <th>板块</th>
+                                <th>时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="myList">
+
+                            </tbody>
+                        </table>
+                        <div style="position:relative;bottom:0px;text-align: center;" id="pagebar" class="pagebar"></div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </main>
+    <div th:replace="forum/footer"></div>
+</div>
+
+
+<script type="text/javascript" src="/forum/js/common.js"></script>
+<script  th:src="@{/ruoyi/js/ry-ui.js}"></script>
+<script th:inline="javascript"> var ctx = [[@{/}]];</script>
+<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+<script th:src="@{/ruoyi/js/fast.js}"></script>
+<script th:src="@{/ajax/libs/laypage/laypage.js}"></script>
+<script>
+    $(function () {
+        initMyQuestionList(1);
+    })
+    function initMyQuestionList(pageNum){
+
+        $.ajax({
+            type: "post",
+            url: ctx+"forumQuestion/myQuestionList",
+            data: {"pageNum":pageNum},
+            xhrFields: {
+                withCredentials: true
+            },
+            dataType: "json",
+            success: function(data) {
+
+                if(data.code==0){
+                    if(data.total>0){
+                        var rows=data.rows;
+                        var html='';
+                        $.each(rows,function(index,row){
+
+                            html+="<tr>";
+                            html+='<td><a data-id="'+row.id+'" style="cursor: pointer;color:#00c1de;" onclick="viewRow(this)"  target="_blank">'+row.title+'</a></td>';
+                            html+="<td>"+row.forumCategoryName+"</td>";
+                            html+="<td>"+row.createTime+"</td>";
+
+                            if(row.available==1){
+
+                                var region=row.questionRegion;
+                                if(region=='top'){
+                                    html+="<td><span style=\"color:red;\">已审(置顶)</span></td>";
+                                }else if(region=='recommend'){
+                                    html+="<td><span style=\"color:#5FB878;\">已审(推荐)</span></td>";
+                                }else if(region=='good'){
+                                    html+="<td><span style=\"color:#FF5722;\">已审(精品)</span></td>";
+                                }else {
+                                    html+="<td><span style=\"color:#333;\">已审核</span></td>";
+                                }
+
+                            }else if(row.available==2){
+                                html+="<td><span style=\"color:red;\">未通过</span></td>";
+                            }else{
+                                html+="<td><span style=\"color:gray;\">草稿</span></td>";
+                            }
+                            html+='<td><a  data-id="'+row.id+'" onclick="editRow(this)" onclick="" target="_blank" class="layui-btn layui-btn-xs">编辑</a><a href="javascript:;" data-region="'+region+'" data-id="'+row.id+'" onclick="deleteRow(this)" class="layui-btn layui-btn-xs layui-btn-danger">删除</a></td>';
+                            html+="</tr>";
+
+                        });
+                        $("#myList").html("");
+                        $("#myList").append(html);
+
+                        var totalPage = (data.total + 10 -1) / 10;
+                        initPager(totalPage,pageNum);
+
+                    }else{
+                        $("#myList").html("<tr><td colspan=\"5\"   style='text-align: center'>暂无记录!</td></tr>");
+                    }
+
+
+
+                }
+            }
+        })
+    }
+
+    function initPager(totalPages,pageNum) {
+        var $pagebar = $("#pagebar");
+        laypage({
+            cont: $pagebar, //容器。值支持id名、原生dom对象，jquery对象,
+            pages: totalPages, //总页数
+            curr: pageNum,
+            jump:jumpPage,
+            skin: '#1E9FFF',
+            first: '首页', //若不显示，设置false即可
+            last: '尾页', //若不显示，设置false即可
+            prev: '上一页', //若不显示，设置false即可
+            next: '下一页' //若不显示，设置false即可
+        });
+    }
+
+    function jumpPage(obj,first){
+        pageNo=obj.curr;
+        if(!first){
+            //alert(pageNo);
+
+            initMyQuestionList(pageNo);
+        }
+    }
+
+    function editRow(obj){
+
+        var id=$(obj).data("id");
+        window.top.location.href="/forumQuestion/editQuestion/"+id;
+    }
+    function viewRow(obj){
+        var id=$(obj).data("id");
+        window.top.location.href="/forum/question/questionDetail/"+id;
+    }
+    function deleteRow(obj){
+
+        Fast.confirm("确定要删除该行吗？",function(){
+
+            var id=$(obj).data("id");
+            var region=$(obj).data("region");
+            if(region=='top'){
+                Fast.msg_error("置顶的文章您无法自行删除!");
+                return;
+            }
+            if(region=='recommend'){
+                Fast.msg_error("推荐的文章您无法自行删除!");
+                return;
+            }
+            if(region=='good'){
+                Fast.msg_error("精品文章您无法自行删除!");
+                return;
+            }
+            $.ajax({
+                type: "post",
+                url: ctx+"forum/question/remove",
+                data: {"ids":id},
+                xhrFields: {
+                    withCredentials: true
+                },
+                dataType: "json",
+                success: function(data) {
+                    if(data.code==0){
+                        Fast.msg_success("删除成功!");
+                        $this.parent().parent().remove();
+                    }else{
+                        Fast.msg_error(data.msg)
+                    }
+                }
+            })
+
+        },function(){});
+
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>绑定账户</title>
+    <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <style>
+        body.silver-bg {
+            background: #f5f7fa;
+        }
+
+        html body {
+            height: 100%;
+        }
+        body {
+            font-family: "Pingfang SC", "Helvetica Neue", "Microsoft Yahei", Helvetica, Arial, "Hiragino Sans GB", "Microsoft Sans Serif", "WenQuanYi Micro Hei", sans;
+            background: white;
+            color: #333;
+            font-size: 14px;
+        }
+        @media (min-width: 1200px){
+            .container {
+                width: 1160px;
+            }
+
+        }
+
+        @media (min-width: 992px){
+            .container {
+                width: 960px;
+            }
+        }
+
+        @media (min-width: 768px){
+            .container {
+                width: 740px;
+            }
+        }
+
+        .container {
+            margin-right: auto;
+            margin-left: auto;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .login-page, .password-reset-page, .complete-profile-page, #login_modal, .signup-verify-page, .bulk-task-verify-page, .bind-mobile-page {
+            margin-top: 15%;
+        }
+
+        @media (min-width: 768px){
+            .col-sm-offset-3 {
+                margin-left: 19%;
+            }
+        }
+
+        @media (min-width: 768px){
+            .col-sm-6 {
+                width: 50%;
+            }
+        }
+
+        @media (min-width: 768px){
+            .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
+                float: left;
+            }
+        }
+
+        .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+            position: relative;
+            min-height: 1px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .login-page .logos-container .logo-container, .password-reset-page .logos-container .logo-container, .complete-profile-page .logos-container .logo-container, #login_modal .logos-container .logo-container, .signup-verify-page .logos-container .logo-container, .bulk-task-verify-page .logos-container .logo-container, .bind-mobile-page .logos-container .logo-container {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 40px;
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 76px;
+        }
+        .login-page .logos-container .connect-logos::after, .password-reset-page .logos-container .connect-logos::after, .complete-profile-page .logos-container .connect-logos::after, #login_modal .logos-container .connect-logos::after, .signup-verify-page .logos-container .connect-logos::after, .bulk-task-verify-page .logos-container .connect-logos::after, .bind-mobile-page .logos-container .connect-logos::after {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, 50%);
+            -ms-transform: translate(-50%, 50%);
+            transform: translate(-50%, 50%);
+            z-index: -1;
+            content: "";
+            display: block;
+            width: 110px;
+            border-top: 1px dashed #d9d9d9;
+        }
+        .login-page .center-container, .password-reset-page .center-container, .complete-profile-page .center-container, #login_modal .center-container, .signup-verify-page .center-container, .bulk-task-verify-page .center-container, .bind-mobile-page .center-container {
+            border-radius: 6px;
+            background-color: white;
+        }
+        .login-page .logos-container .connect-logos, .password-reset-page .logos-container .connect-logos, .complete-profile-page .logos-container .connect-logos, #login_modal .logos-container .connect-logos, .signup-verify-page .logos-container .connect-logos, .bulk-task-verify-page .logos-container .connect-logos, .bind-mobile-page .logos-container .connect-logos {
+            display: inline-block;
+            margin: 0 37px;
+            background: #f5f7fa;
+            position: relative;
+        }
+        .login-page .center-container section, .password-reset-page .center-container section, .complete-profile-page .center-container section, #login_modal .center-container section, .signup-verify-page .center-container section, .bulk-task-verify-page .center-container section, .bind-mobile-page .center-container section {
+            padding: 0;
+            color: #848484;
+            border-radius: 6px;
+        }
+        section {
+            text-align: center;
+            color: #333;
+            background-color: white;
+            padding: 55px 0;
+            position: relative;
+        }
+        .login-page .center-container .panel-header-container .title-text, .password-reset-page .center-container .panel-header-container .title-text, .complete-profile-page .center-container .panel-header-container .title-text, #login_modal .center-container .panel-header-container .title-text, .signup-verify-page .center-container .panel-header-container .title-text, .bulk-task-verify-page .center-container .panel-header-container .title-text, .bind-mobile-page .center-container .panel-header-container .title-text {
+            font-size: 30px;
+            color: #333;
+            font-weight: bold;
+            line-height: 100%;
+        }
+        .login-page .center-container .panel-header-container hr, .password-reset-page .center-container .panel-header-container hr, .complete-profile-page .center-container .panel-header-container hr, #login_modal .center-container .panel-header-container hr, .signup-verify-page .center-container .panel-header-container hr, .bulk-task-verify-page .center-container .panel-header-container hr, .bind-mobile-page .center-container .panel-header-container hr {
+            border-top-color: #d9d9d9;
+            margin: 25px 0 0;
+        }
+
+        hr {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border: 0;
+            border-top: 1px dashed #eeeeee;
+        }
+        .field label {
+            color: #505050;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        .login-page .center-container .login-panel .field input[type="text"],.login-page .center-container .login-panel .field input[type="password"]{
+            border: 1px solid #dfdfdf;
+            margin-bottom: 0;
+            height: 40px;
+            font-size: 14px;
+            border-radius: 2px;
+            width: 96%;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding:0px 8px;
+        }
+        .gd-btn-primary-solid:hover{
+            background: #5398ff;
+            color: #fff;
+            font-size: 16px;
+        }
+        .login-page .center-container .login-panel .field input[type="text"]:focus,.login-page .center-container .login-panel .field input[type="password"]:focus{
+            border: 1px solid #2875e8;
+            border-radius: 2px;
+        }
+        .gd-btn-thick, .gd-btn-thick:hover, .gd-btn-thick.hover, .gd-btn-thick:focus {
+            font-size: 16px;
+            line-height: 40px;
+            height: 40px;
+        }
+
+        .gd-btn-succeed, .gd-btn-succeed:focus, .gd-btn-primary, .gd-btn-primary-outline, .gd-btn-primary-solid, .cke_dialog .cke_dialog_body .cke_dialog_footer .cke_dialog_footer_buttons a.cke_dialog_ui_button_ok, .cke_dialog .fileinput-button, .gd-btn-primary:focus, .gd-btn-primary-outline:focus, .gd-btn-primary-solid:focus, .cke_dialog .cke_dialog_body .cke_dialog_footer .cke_dialog_footer_buttons a.cke_dialog_ui_button_ok:focus, .cke_dialog .fileinput-button:focus {
+            background: #2875e8;
+            color: #fff;
+        }
+        .gd-btn, .cke_dialog .cke_dialog_body .cke_dialog_footer .cke_dialog_footer_buttons a.cke_dialog_ui_button, .cke_dialog .fileinput-button {
+            font-size: 14px;
+            display: inline-block;
+            padding: 0 14px;
+            width: auto;
+            height: auto;
+            line-height: auto;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 32px;
+            border-radius: 2px;
+            border: 0;
+            cursor: pointer;
+            min-width: 80px;
+            -webkit-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+        }
+        .login-page .center-container .panel-header-container, .password-reset-page .center-container .panel-header-container, .complete-profile-page .center-container .panel-header-container, #login_modal .center-container .panel-header-container, .signup-verify-page .center-container .panel-header-container, .bulk-task-verify-page .center-container .panel-header-container, .bind-mobile-page .center-container .panel-header-container {
+            color: #848484;
+            padding: 1px 25px 0;
+        }
+
+    </style>
+</head>
+
+<body class="site silver-bg  signup-social-signup-new-page ">
+
+<div id="session_content_container">
+    <div class="container">
+        <div class="row">
+            <div class="login-page login-box col-sm-6 col-sm-offset-3" style="min-width: 480px;">
+                <div class="logos-container text-center">
+                    <div th:if="${type=='gitee'}" class="logo-container"><img style="width: 80px;height: 80px;border-radius: 40px;" src="/images/icon_gitee.ico"/></div>
+                    <div th:if="${type=='baidu'}" class="logo-container"><img style="width: 80px;height: 80px;border-radius: 40px;" src="/images/icon_baidu.png"/></div>
+                    <div th:if="${type=='weibo'}" class="logo-container"><img style="width: 80px;height: 80px;border-radius: 40px;" src="/images/icon_weibo.png"/></div>
+                    <div th:if="${type=='qq'}" class="logo-container" style="font-size: 45px;color: #009aff;"><i class="fa fa-qq"></i></div>
+                    <div th:if="${type=='wechat'}" class="logo-container" style="font-size: 45px;color: #44b549;"><i class="fa fa-wechat"></i></div>
+                    <div class="connect-logos" style="display: inline-block;font-size: 34px;color: #60b700;"><i class="fa fa-check-circle"></i></div>
+                    <div class="logo-container"><img style="width: 80px;height: 80px;border-radius: 40px;" src="/images/ry_logo.png"/></div>
+                </div>
+
+                <div class="center-container" style="margin-top: 15px;">
+                    <section class="login-panel clearfix">
+                        <div class="panel-header-container text-center"><p class="title-text">绑定账号</p><hr></div>
+                        <div class="panel-body" style="padding: 25px !important;">
+                            <form style="text-align: left;" id="login_form"  accept-charset="UTF-8" method="post" novalidate="novalidate">
+                                <input id="type" name="type" type="hidden" th:value="${type}">
+                                <input id="openid" name="openid" type="hidden" th:value="${openid}">
+                                <input id="successUri" name="successUri" type="hidden" th:value="${successUri}">
+                                <input id="thirdAccount" name="openid" type="hidden" th:value="${thirdAccount}">
+                                <p style="text-align: center;font-size: 13px;">账号:admin 密码:admin123</p>
+                                <div class="fields">
+                                    <div class="field email-or-mobile-no-field">
+                                        <label class="inline-block">登录账户</label>
+                                        <input type="text" name="account" id="account" autofocus="autofocus">
+                                    </div>
+
+                                    <div class="field password-field" style="margin-top: 15px;">
+                                        <label for="pwd">密码</label>
+                                        <input type="password" name="password" id="pwd" autocomplete="off">
+
+                                    </div>
+
+                                    <input type="hidden" name="social_account_binding" id="social_account_binding" value="true">
+                                    <div class="field error-message-field helper-error-message-container identity-validate-container gd-hide">
+                                    </div>
+
+                                    <div class="submit-field" style="margin-top: 25px;">
+                                        <a style="width: calc(100% - 25px);height: 40px;font-size: 16px;    line-height: 40px;" onclick="submit()"  class="gd-btn gd-btn-primary-solid gd-btn-thick">
+                                            <span class="text">登录并绑定</span>
+                                        </a></div>
+
+
+                                </div>
+                            </form>      </div>
+                    </section>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+<script th:src="@{/ruoyi/js/fast.js}"></script>
+<script th:inline="javascript">
+    var ctx = [[@{/}]];
+        function submit(){
+            var account=$("#account").val();
+            var pwd=$("#pwd").val();
+            if(isEmpty(account)){
+                Fast.msg_error("请输入绑定账号!");
+                return;
+            }
+            if(isEmpty(pwd)){
+                Fast.msg_error("请输入账号密码!");
+                return;
+            }
+            var type=$("#type").val();
+            var openid=$("#openid").val();
+            var successUri=$("#successUri").val();
+            var thirdAccount=$("#thirdAccount").val();
+            $.ajax({
+                type: "post",
+                url: ctx + "thirdLogin/bindSave",
+                dataType: "json",
+                data: {type:type,openid:openid,account:account,pwd:pwd,thirdAccount:thirdAccount},
+                beforeSend:function(){
+                    layer.load("正在加载，请稍后...");
+                },
+                success:function(json){
+                    layer.closeAll('loading');
+                    if (json.code == 0) {
+                        Fast.msg_success(json.msg);
+                        setTimeout(function(){
+                            window.location.href=isEmpty(successUri)?"/":successUri;
+                        },800);
+                    } else {
+                        Fast.msg_error(json.msg);
+                    }
+                }
+            });
+
+
+        }
+        $(function () {
+
+        })
+</script>
+</body>
+</html>

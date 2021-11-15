@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.forum.mapper.ForumOutMapper">
+    
+    <resultMap type="ForumOut" id="ForumOutResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="forumOutType"    column="forum_out_type"    />
+        <result property="description"    column="description"    />
+        <result property="amount"    column="amount"    />
+        <result property="orderTime"    column="order_time"    />
+    </resultMap>
+
+    <sql id="selectForumOutVo">
+        select id,user_id, forum_out_type, description, amount, order_time from forum_out
+    </sql>
+
+    <select id="selectForumOutList" parameterType="ForumOut" resultMap="ForumOutResult">
+        <include refid="selectForumOutVo"/>
+        <where>  
+            <if test="id != null  and id != ''"> and id = #{id}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="forumOutType != null "> and forum_out_type = #{forumOutType}</if>
+        </where>
+        order by order_time desc
+    </select>
+    
+    <select id="selectForumOutById" parameterType="String" resultMap="ForumOutResult">
+        <include refid="selectForumOutVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertForumOut" parameterType="ForumOut">
+        insert into forum_out
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="forumOutType != null">forum_out_type,</if>
+            <if test="description != null">description,</if>
+            <if test="amount != null">amount,</if>
+
+            order_time,
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="forumOutType != null">#{forumOutType},</if>
+            <if test="description != null">#{description},</if>
+            <if test="amount != null">#{amount},</if>
+            now()
+         </trim>
+    </insert>
+
+    <update id="updateForumOut" parameterType="ForumOut">
+        update forum_out
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="forumOutType != null">forum_out_type = #{forumOutType},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="orderTime != null">order_time = #{orderTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteForumOutById" parameterType="String">
+        delete from forum_out where id = #{id}
+    </delete>
+
+    <delete id="deleteForumOutByIds" parameterType="String">
+        delete from forum_out where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

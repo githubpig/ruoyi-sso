@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.forum.mapper.ForumTagsMapper">
+    
+    <resultMap type="ForumTags" id="ForumTagsResult">
+        <result property="tagId"    column="tag_id"    />
+        <result property="tagType"    column="tag_type"    />
+        <result property="userId"    column="user_id"    />
+        <result property="tagName"    column="tag_name"    />
+        <result property="sort"    column="sort"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectForumTagsVo">
+        select tag_id, tag_type, user_id, tag_name, sort, status from forum_tags
+    </sql>
+
+    <select id="selectForumTagsList" parameterType="ForumTags" resultMap="ForumTagsResult">
+        <include refid="selectForumTagsVo"/>
+        <where>  
+            <if test="tagName != null  and tagName != ''"> and tag_name like concat('%', #{tagName}, '%')</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectForumTagsById" parameterType="Long" resultMap="ForumTagsResult">
+        <include refid="selectForumTagsVo"/>
+        where tag_id = #{tagId}
+    </select>
+        
+    <insert id="insertForumTags" parameterType="ForumTags" useGeneratedKeys="true" keyProperty="tagId">
+        insert into forum_tags
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tagType != null">tag_type,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="tagName != null">tag_name,</if>
+            <if test="sort != null">sort,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tagType != null">#{tagType},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="tagName != null">#{tagName},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateForumTags" parameterType="ForumTags">
+        update forum_tags
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tagType != null">tag_type = #{tagType},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="tagName != null">tag_name = #{tagName},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where tag_id = #{tagId}
+    </update>
+
+    <delete id="deleteForumTagsById" parameterType="Long">
+        delete from forum_tags where tag_id = #{tagId}
+    </delete>
+
+    <delete id="deleteForumTagsByIds" parameterType="String">
+        delete from forum_tags where tag_id in 
+        <foreach item="tagId" collection="array" open="(" separator="," close=")">
+            #{tagId}
+        </foreach>
+    </delete>
+
+    <select id="selectForumTagsAll"  resultMap="ForumTagsResult">
+        <include refid="selectForumTagsVo"/>
+        where  status=0
+        and tag_type = 's'
+        order by sort asc
+    </select>
+</mapper>

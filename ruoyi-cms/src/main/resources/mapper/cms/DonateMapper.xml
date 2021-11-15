@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.cms.mapper.DonateMapper">
+
+    <resultMap type="Donate" id="DonateResult">
+        <result property="id"    column="id"    />
+        <result property="platform"    column="platform"    />
+        <result property="uid"    column="uid"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="amount"    column="amount"    />
+        <result property="msg"    column="msg"    />
+        <result property="donateTime"    column="donate_time"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectDonateVo">
+        select id, platform, uid, avatar, amount, msg, donate_time, create_time from cms_donate
+    </sql>
+
+    <select id="selectDonateList" parameterType="Donate" resultMap="DonateResult">
+        <include refid="selectDonateVo"/>
+        <where>
+            <if test="platform != null  and platform != ''"> and platform = #{platform}</if>
+            <if test="amount != null"> and amount = #{amount}</if>
+            <if test="uid != null  and uid != ''"> and uid like concat('%', #{uid}, '%')</if>
+            <if test="donateTime != null"> and donate_time = #{donateTime}</if>
+        </where>
+    </select>
+
+    <select id="selectDonateById" parameterType="Long" resultMap="DonateResult">
+        <include refid="selectDonateVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertDonate" parameterType="Donate" useGeneratedKeys="true" keyProperty="id">
+        insert into cms_donate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="platform != null">platform,</if>
+            <if test="uid != null">uid,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="amount != null">amount,</if>
+            <if test="msg != null">msg,</if>
+            <if test="donateTime != null">donate_time,</if>
+            create_time,
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="platform != null">#{platform},</if>
+            <if test="uid != null">#{uid},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="msg != null">#{msg},</if>
+            <if test="donateTime != null">#{donateTime},</if>
+            now()
+         </trim>
+    </insert>
+
+    <update id="updateDonate" parameterType="Donate">
+        update cms_donate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="platform != null">platform = #{platform},</if>
+            <if test="uid != null">uid = #{uid},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="msg != null">msg = #{msg},</if>
+            <if test="donateTime != null">donate_time = #{donateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDonateById" parameterType="Long">
+        delete from cms_donate where id = #{id}
+    </delete>
+
+    <delete id="deleteDonateByIds" parameterType="String">
+        delete from cms_donate where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

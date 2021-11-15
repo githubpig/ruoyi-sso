@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>帖子详情</title>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
+    <link rel="stylesheet" href="/forum/css/main.min.css">
+    <link rel="bookmark" type="image/x-icon" href="forum/images/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/forum/images/favicon.ico">
+
+    <link rel="stylesheet" href="/forum/css/thirdStylePersonal.css">
+
+    <link rel="stylesheet" href="/forum/css/demo.css">
+    <link rel="stylesheet" href="/forum/css/articledetails.css">
+    <link rel="stylesheet" href="/forum/css/commentWidget.css">
+    <link rel="stylesheet" href="/forum/css/mystyle.css">
+    <script type="text/javascript" src="/forum/lib/jquery.min.js"></script>
+    <style>
+        /*阅读全文按钮*/
+        .readall_box {  position: relative;  z-index: 9999;  padding: 0 0 0px;  margin-top: -268px;  text-align: center;  }
+        .readall_box .read_more_mask {  height: 268px;  background: -moz-linear-gradient(bottom,rgba(255,255,255,.1),rgba(255,255,255,0));  background: -webkit-gradient(linear,0 top,0 bottom,from(rgba(255,255,255,0)),to(#fff));  background: -o-linear-gradient(bottom,rgba(255,255,255,.1),rgba(255,255,255,0));  }
+        .readall_box a.button{cursor: pointer;}
+
+        .master {
+            white-space: nowrap;
+            color: #fff;
+            background-color: #4cc8ff;
+            border-radius: 4px;
+            padding: 0px 5px;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: normal;
+        }
+
+    </style>
+</head>
+<body>
+<div id="body">
+
+    <div th:replace="forum/header"></div>
+    <!--*******************************-->
+    <main class="main-wrapper">
+        <div class="container-area">
+            <!--<div class="work-details-left">-->
+                <div class="work-details-content border-radius-top bc-fff" style="width: calc(100% - 270px);float:left;">
+                    <!--文章头部区域-->
+                    <div class="border-radius-top" style="background: #fff;">
+                        <div class="details-contitle-box article-details-head">
+                            <!--标题-->
+                            <h2 th:text="${forumQuestion.title}">
+
+                            </h2>
+                            <!--分类,版权,浏览数,评论数,推荐数-->
+                            <div class="work-head-box">
+                                <div class="head-left">
+                                    <!--发布时间-->
+                                    <p class="title-time" >
+                                        <span th:text="${#dates.format(forumQuestion.createTime,'yyyy-MM-dd HH:mm:ss')}"></span>&nbsp;发布
+                                    </p>
+                                </div>
+                                <div class="head-right">
+                        <span class="head-data-show">
+                        <a href="javascript:;"  class="see vertical-line">
+                            <i></i>[[${forumQuestion.hit}]]
+                        </a>
+                        <a href="javascript:;" class="news vertical-line">
+                            <i></i>[[${forumQuestion.commentNum}]]
+                        </a>
+                        <a href="javascript:;"  class="recommend-show">
+                            <i></i>[[${forumQuestion.upVote}]]
+                        </a>
+                        </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--文章简介-->
+
+                    <!--文章内容-->
+                    <div class="left-img-con" style="background: #fff;">
+                        <!--文章内容区域, 文字,图片和视频-->
+                        <div class="work-show-box" style="padding:18px !important;width:calc(100% - 45px)  !important;">
+                            <input name="" data-id="0" class="content-works" type="hidden">
+                            <div class="article-content-wraper" style="height: auto;">
+                                <!--编辑器内容-->
+                                <div th:utext="${forumQuestion.content}" style="margin-left: 29px;"></div>
+                                <!--编辑器内容-->
+
+                                <fieldset th:if="${not #strings.isEmpty(forumQuestion?.attachment)}" style="font-family: sans-serif; border: 0px none;">
+                                    <section style="color:inherit;padding:5px 10px 0px 35px;border-left-width:2px;border-left-style:dotted;border-left-color:#e4e4e4;margin-left:27px;">
+                                        <section class="autonum" style="width:32px;height:32px;color:#cafbd7;text-align:center;line-height:32px;border-radius:16px;background:#0eb83a;margin-left:-53px;margin-top:23px;">
+                                            附件
+                                        </section>
+                                        <section style="color:inherit;padding-bottom:10px;margin-top:-30px;">
+                                            <p style="clear: both; line-height: 1.5em; color: inherit;">
+                                                <strong>附件下载:</strong>
+                                            </p>
+                                            <p style="clear:both;line-height:1.5em;font-size:14px;color:inherit;margin-top: 11px;">
+                                                <a style="color: #00abe9;cursor: pointer;font-size: 16px;" onclick="downloadFree(this,1)" th:data-url="@{${forumQuestion?.attachment}}" th:if="${forumQuestion?.downloadType==0}">立即免费下载</a>
+                                                <a style="color: #00abe9;cursor: pointer;font-size: 16px;" onclick="downloadFree(this,2)" th:data-url="@{${forumQuestion?.attachment}}" th:if="${forumQuestion?.downloadType==1}">登录后免费下载</a>
+                                                <a style="color: #00abe9;cursor: pointer;font-size: 16px;" onclick="downloadPay(this)" th:data-paytype="@{${forumQuestion?.payType}}" th:data-paycount="@{${forumQuestion?.payCount}}"  th:data-id="@{${forumQuestion?.id}}" th:if="${forumQuestion?.downloadType==2 &&forumQuestion?.payType==1}"><strong style="color: red;">[[${forumQuestion?.payCount}]]积分</strong>下载</a>
+                                                <a style="color: #00abe9;cursor: pointer;font-size: 16px;" onclick="downloadPay(this)" th:data-paytype="@{${forumQuestion?.payType}}" th:data-paycount="@{${forumQuestion?.payCount}}"  th:data-id="@{${forumQuestion?.id}}" th:if="${forumQuestion?.downloadType==2 &&forumQuestion?.payType==2}"><strong style="color: red;">¥[[${forumQuestion?.payCount}]]</strong>付费下载</a>
+                                            </p>
+                                        </section>
+                                    </section>
+                                </fieldset>
+                                <p>
+                                    <br/>
+                                </p>
+
+                            </div>
+
+                            <div class="readall_box see-more-wrap white-box-shadow text-center hide" style="display: none;z-index: 10;">
+                                <div class="read_more_mask"></div>
+                                    <input id="readAll" class="btn-default-secondary see-more-btn btn-current-middle" value="阅读全文" type="button">
+
+                                    <script type="text/javascript">
+                                        $(function () {
+                                            if ($(".article-content-wraper").height() >= 1000) {
+                                                $(".article-content-wraper").attr("style", "height:1000px;overflow-y:hidden;");
+                                                $(".readall_box").show();
+                                            }
+                                            $("#readAll").click(function () {
+                                                $(this).parents().find(".article-content-wraper").attr("style", "");
+                                                $(this).parents(".readall_box").hide();
+                                            });
+                                        })
+                                    </script>
+                            </div>
+
+                        </div>
+
+                        <div class="recommend-box">
+                            <div id="detail-recommend-div" class="recommend-works js-details-common-recommend normal"  title="点赞">
+                                <div class="big-zan-icon icon-recommend"></div>
+                                <i id="loveCount" class="recommend-number">[[${forumQuestion.upVote}]]</i>
+                            </div>
+                        </div>
+
+
+                        <!--举报,分享,附件,收藏数-->
+                        <div class="details-con-other border-top">
+                            <p class="c-666 f-12">声明：本站内网友所发表的所有内容及言论仅代表其本人，并不反映任何本站之意见及观点。</p>
+                            <div class="three-link">
+                                <input type="button" id="favButton" th:if="${favouriteFlag=='0'}" th:data-tid="${forumQuestion.id}" onclick="favourite(this)" class="btn-default-secondary details-collection-btn collection js-not-fav js-project-fav" value="收藏"  title="收藏">
+                                <input type="button" id="favButton" th:if="${favouriteFlag=='1'}" th:data-tid="${forumQuestion.id}" onclick="removeFavourite(this)" class="btn-default-secondary details-collection-btn collection js-not-fav js-project-fav" value="取消收藏"  title="取消收藏">
+
+                                <!--<input type="button" class="btn-default-secondary details-share" id="share" value="分享">-->
+                                <span class="report" th:data-tid="${forumQuestion.id}"  onclick="showJuBao(this)" >
+                                    <a href="javascript:;">举报</a>
+                                </span>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="comment-module article-comments" style="background: #fff;margin-top: 12px;">
+                        <!--写评论-->
+                        <div id="detail-add-comment" class="editcomment js-common-comment-wrap">
+                            <div class="pinlunt">
+                                <textarea type="text"  id="comment-add-textarea"   placeholder="说点什么..." class="textarea-style commentbig textarea"   style="height: 60px; padding-right: 60px;"></textarea>
+
+                               <div th:if="${user==null}" class="unlogin-textarea-wrap flex-center">
+                                    <button class="btn-default-main btn-current-small mr-10" onclick="openLoginWindow()">登录</button>后发布评论
+                                </div>
+
+                            </div>
+                            <div class="expression-box" th:if="${user!=null}" >
+                               <!-- <a href="javascript:;" class="biaoqing" z-st="smile" onclick="popFace(this)">添加表情</a>-->
+                                <a  onclick="submitComment()" style="float: right" class="btn-current-middle btn-default-main" >评论</a>
+                            </div>
+                        </div>
+                        <!--评论列表-->
+                        <div id="detail-comment-content" th:if="${forumQuestion.commentNum==0}" class="comment-box js-show-only-author">
+                            <div id="detail-empty-comment" class="allcomment-empy">
+                                <a href="javascript:;" z-st="comment_first" class="link js-write-comments">成为第一个评论的人</a>
+                            </div>
+                            <div id="ajaxfeed-loading" style="text-align: center;" class="hide">
+                                <img src="/forum/images/page_loading.gif">
+                            </div>
+                        </div>
+
+                        <div id="detail-all-comment" th:if="${forumQuestion.commentNum>0}"  class="allcomment-box">
+                            <div id="detail-all-comment-title"><p class="commenttxt">全部评论<span class="ml-10 c-bbb">[[${forumQuestion.commentNum}]]</span></p></div>
+
+                            <div class="allcomment-con" id="comment-normal-content">
+
+                                    <div class="commentwrap" id="detail-all-comment-body">
+                                        <ul class="commentcon" id="commentList">
+
+                                        </ul>
+                                    </div>
+                             </div>
+
+                            <div id="comment-down-con"></div>
+                        </div>
+
+    </div>
+
+</div>
+
+            <div class="details-right-wrap" >
+
+                <div class="normal-userinfo-box" style="background: #fff;">
+                    <div class="author-card follow-box"><div class="card-media designer-card"  >
+                        <div class="avatar-container-80 z-center">
+                            <a th:href="@{'/forum/u/'+${userId}}"    th:title="${userName}" class="author-avatar" target="_blank">
+                                <img th:src="${avatar}" th:alt="${userName}" width="80" height="80"></a>
+
+                        </div>
+                        <div class="presonal-info">
+                            <a th:href="@{'/forum/u/'+${userId}}"    target="_blank" th:title="${userName}"  class="author-name" th:text="${userName}"></a>
+                                            <span class="zcool-treetop">
+
+                                            </span>
+
+                        </div>
+                        <div class="position-info">
+
+                        </div>
+                        <div class="btn-area">
+                            <button th:if="${other=='0'}" th:data-id="${forumQuestion.id}" onclick="editQuestion(this)" class="btn-default-main btn-current js-edit-entry">编辑本文</button>
+                            <button id="focusBtn" th:if="${other=='1'}" th:data-userid="${userId}" onclick="addFocus(this)" class="btn-default-main btn-current js-edit-entry">关注</button>
+                        </div>
+                    </div></div>
+
+                </div>
+
+
+                <div class="user-work" style="">
+                    <div class="ml10 newad" id="index_02">
+                            <a href="" target="_blank">
+                                <img src="/forum/images/d576f4a339661882d399a671024fbd41.jpeg" width="520" height="390" alt="" title="" border="0">
+                            </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+    <!--*******************************-->
+    <div th:replace="forum/footer"></div>
+
+</div>
+<!--遮罩-->
+
+<div class="shade hide">
+</div>
+<div class="toast-fail hide">
+    <span class="toast-pictrue"></span>
+    <div class="toast-tips-text">
+        <span class="toast-first-text"></span> <br>
+        <span class="toast-socend-text"></span>
+    </div>
+</div>
+<div class="toast-success hide">
+    <span class="toast-pictrue"></span>
+    <div class="toast-tips-text">
+        <span class="toast-first-text"></span> <br>
+        <span class="toast-socend-text"></span>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="/forum/js/common.js"></script>
+
+<script src="/forum/lib/edtiorCrop/js/bootstrap.min.js"></script>
+
+<script  th:src="@{/ruoyi/js/ry-ui.js}"></script>
+
+<script type="text/javascript" src="/forum/js/personalProfile.js"></script>
+
+<script th:inline="javascript"> var ctx = [[@{/}]];</script>
+<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+<script th:src="@{/ruoyi/js/fast.js}"></script>
+<script type="text/javascript" src="/forum/js/jubao.js"></script>
+<script>
+    var tid='[[${forumQuestion.id}]]';
+    var isLogin='[[${user!=null}]]';
+    var userFocusFlag='[[${focusFlag}]]';
+    var userId='[[${userId}]]';
+    $(function () {
+        initCommentList();
+        $(".recommend-box").click(function () {
+            $.ajax({
+                url: ctx+"forum/question/upVote/"+tid,
+                type: "post",
+                dataType: "json",
+                data: null,
+                success: function(json) {
+                    if(json.code!=0){
+                        Fast.msg_error(json.msg)
+                    }else{
+                        Fast.msg_success("点赞成功!");
+                        $("#loveCount").text(parseInt($("#loveCount").text())+1);
+                    }
+                }
+            });
+        })
+        if(userFocusFlag=='true'){
+            $("#focusBtn").text("取消关注").removeAttr("onclick").attr("onclick","removeFocus(this)");
+        }else{
+            $("#focusBtn").text("关注").removeAttr("onclick").attr("onclick","addFocus(this)");
+        }
+    })
+    function editQuestion(obj){
+        var id=$(obj).data("id");
+        window.top.location.href="/forumQuestion/editQuestion/"+id;
+    }
+
+    function downloadFree(obj,type) {
+        var url=$(obj).data("url");
+        if(type==2){
+            if (isLogin == 'false') {
+                openLoginWindow();
+                return false;
+                return;
+            }
+        }
+        window.top.location.href=url;
+    }
+    function downloadPay(obj) {
+        if (isLogin == 'false') {
+            openLoginWindow();
+            return;
+        }
+        var id=$(obj).data("id");
+        var payCount=$(obj).data("paycount");
+        var payType=$(obj).data("paytype");
+
+        if(payType==1){//积分
+            Fast.confirm("确定要花费"+payCount+"积分下载该资源吗？重复下载不扣积分。",function(){
+
+                $.ajax({
+                    type: "post",
+                    url: ctx+"forumQuestion/downloadPay/"+id,
+                    data: null,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if(data.code==0){
+                            window.top.location.href=data.data;
+                        }else{
+                            Fast.msg_error(data.msg)
+                        }
+                    }
+                })
+            })
+        }else{
+            //todo
+            $.layer.alert_wrong("购买该付费资源请联系群主管理员!");
+        }
+
+    }
+    //关注用户
+    function addFocus(obj){
+        var focus_user_id=$(obj).data("userid");
+        if(isLogin=='false'){
+            openLoginWindow();
+            return;
+        }
+
+        $.ajax({
+            type: "post",
+            url: ctx+"forumQuestion/addFocus/"+focus_user_id,
+            data: null,
+            xhrFields: {
+                withCredentials: true
+            },
+            dataType: "json",
+            success: function(data) {
+                if(data.code==0){
+                    Fast.msg_success("关注成功!");
+                    $("#focusBtn").text("取消关注");
+                    $("#focusBtn").removeAttr("onclick").attr("onclick","removeFocus(this)");
+                }else{
+                    Fast.msg_error(data.msg)
+                }
+            }
+        })
+    }
+    //取消关注
+    function removeFocus(obj){
+        if(isLogin=='false'){
+            openLoginWindow();
+            return;
+        }
+        var focus_user_id=$(obj).data("userid");
+        $.ajax({
+            type: "post",
+            url: ctx+"forumQuestion/removeFocus/"+focus_user_id,
+            data: null,
+            xhrFields: {
+                withCredentials: true
+            },
+            dataType: "json",
+            success: function(data) {
+                if(data.code==0){
+                    Fast.msg_success("取消关注成功!");
+                    $("#focusBtn").text("关注");
+                    $("#focusBtn").removeAttr("onclick").attr("onclick","addFocus(this)");
+                }else{
+                    Fast.msg_error(data.msg)
+                }
+            }
+        })
+    }
+    function favourite(obj){
+        if(isLogin=='false'){
+            openLoginWindow();
+            return;
+        }
+
+        var tid=$(obj).data("tid");
+        $.ajax({
+            type: "post",
+            url: ctx+"forumQuestion/addFavourite/"+tid,
+            data: null,
+            xhrFields: {
+                withCredentials: true
+            },
+            dataType: "json",
+            success: function(data) {
+                if(data.code==0){
+                    Fast.msg_success("收藏成功!");
+                    $("#favButton").val("取消收藏");
+                    $("#favButton").removeAttr("onclick").attr("onclick","removeFavourite(this)");
+                }else{
+                    Fast.msg_error(data.msg)
+                }
+            }
+        })
+    }
+
+    function removeFavourite(obj){
+        var tid=$(obj).data("tid");
+        $.ajax({
+            type: "post",
+            url: ctx+"forumQuestion/removeFavourite/"+tid,
+            data: null,
+            xhrFields: {
+                withCredentials: true
+            },
+            dataType: "json",
+            success: function(data) {
+                if(data.code==0){
+                    Fast.msg_success("取消收藏成功!");
+                    $("#favButton").val("收藏");
+                    $("#favButton").removeAttr("onclick").attr("onclick","favourite(this)");
+                }else{
+                    Fast.msg_error(data.msg)
+                }
+            }
+        })
+    }
+    function showJuBao(obj){
+        if(isLogin=='true')
+        {
+            var tid=$(obj).data("tid");
+            jubao(tid);
+        }
+        else{
+            openLoginWindow();
+        }
+
+
+    }
+    //用户需要重写覆盖jubao.js的提交方法
+    function jubaoSubmit(target_id){
+
+        var report_type=getJuBaoValue();
+        target_id=target_id+'';
+
+        $.ajax({
+            type: "post",
+            url: ctx+"forum/report/addReport/"+target_id,
+            data: {"reportType":report_type,"module":"question"},
+            xhrFields: {
+                withCredentials: true
+            },
+            dataType: "json",
+            success: function(data) {
+                if(data.code==0){
+                    layer.closeAll();
+                    jubaoSuccess();
+                }else{
+                    Fast.msg_error(data.msg)
+                }
+            }
+        })
+
+    }
+
+    //评论
+
+    function submitComment(){
+
+            var c=$("#comment-add-textarea").val();
+            if($.common.isEmpty(c)){
+                pageToastFail("评论内容不能为空!");
+                return;
+            }
+        $.ajax({
+            type: "post",
+            url: ctx+"forum/comment/add",
+            data: {"content":c,"tid":tid,"type":"question"},
+            xhrFields: {
+                withCredentials: true
+            },
+            dataType: "json",
+            success: function(data) {
+                if(data.code==0){
+                    layer.closeAll();
+                    $("#comment-add-textarea").val("");
+                    pageToastSuccess("评论成功!");
+                    setTimeout(function(){location.reload();},1000);
+                }else{
+                    pageToastFail(data.msg)
+                }
+            }
+        })
+
+    }
+    function initCommentList(pageNum){
+        var url=ctx+"forum/comments";
+
+        $.ajax({
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: {"pageNum": (pageNum==null? 1 : pageNum),"tid":tid},
+            success: function(json) {
+                if(json.code!=0){
+                    console.log(json.msg);
+                    return;
+                }
+                var data=json.data;
+                var total=data.total;
+                var rows=data.rows;
+                var hasNextPage=data.hasNextPage;
+                var nextPage=data.nextPage;
+                var html="";
+                if(total>0){
+                    $.each(rows,function (index,row) {
+                        html+='<li class="comment-list comment-first-list isEffectComment isFadeIn">';
+                        html+='<div class="comment-info-box isEffectComment isFadeIn">';
+                        html+='<div class="js-comment-list" >';
+                        html+='<div class="avatar-container-48 absolute">';
+                        html+='<a href="/forum/u/'+row.userId+'" class="userimg"  target="_blank">';
+                        html+='<img src="'+row.avatar+'" alt="'+row.userName+'">';
+                        html+='</a>';
+                        html+='</div>';
+                        html+='<div>';
+                        html+='<a href="/forum/u/'+row.userId+'" title="'+row.userName+'" class="link fwt-800" target="_blank"> '+row.userName+'</a>';
+                        if(userId==row.userId){
+                            html+='&nbsp;&nbsp;<span class="master">作者</span>';
+                        }
+                        html+='</div>';
+                        html+='<p class="commoncon c-666">'+row.content+'</p>';
+                        html+='<div class="flex-between mt-10 js-data-box">';
+                        html+='<span class="c-bbb js-create-time" title="'+row.createTime+'">'+row.timeDesc+'</span>';
+                        html+='<span class="comment-zan" onclick="upVote(this)" data-id="'+row.id+'">';
+                        html+='<span class="ml-5">'+row.upVote+'</span>';
+                        html+='</span>';
+                        html+='</div>';
+                        html+='</div>';
+                        html+='</div>';
+                        html+='</li>';
+                    });
+
+                    $("#commentList").append(html);
+                    if(hasNextPage){
+                        var c='<div id="btnMore" class="more-comment hide" style="display: block;">';
+                        c+='<span class="view-more-text" onclick="initCommentList('+nextPage+')" id="details-view-more">查看更多评论</span>';
+                        c+='</div>';
+                        $("#comment-normal-content").append(c);
+
+                    }else{
+                        $("#btnMore").remove();
+
+                        var c='<div class="more-comment hide" style="display: block;">';
+                         c+='<span  class="view-more-text disabled" id="details-view-more">没有更多评论了</span>';
+                         c+='</div>';
+                        $("#comment-normal-content").append(c);
+                    }
+                }
+
+
+
+            }
+        });
+    }
+
+    //浏览数+1
+    $.ajax({
+        url: ctx+"forum/questionView",
+        type: "post",
+        dataType: "json",
+        data: {"questionId":tid},
+        success: function(json) {
+            if(json.code!=0){
+                console.log(json.msg);
+            }else{
+                console.log(json.msg);
+            }
+        }
+    });
+
+
+    //评论点赞
+    function upVote(obj) {
+        $.ajax({
+            url: ctx + "forum/comment/upVote",
+            type: "post",
+            dataType: "json",
+            data: {"commentId": $(obj).data("id")},
+            success: function (json) {
+                if (json.code != 0 && json.code != '0') {
+                    Fast.msg_error(json.msg);
+                    return;
+                }
+                $(obj).addClass("active");
+                $(obj).find("span").text(parseInt($(obj).find("span").text()) + 1);
+                Fast.msg_success(json.msg);
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

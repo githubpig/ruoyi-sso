@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>私信</title>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
+    <link rel="stylesheet" href="/forum/css/main.min.css">
+    <link rel="bookmark" type="image/x-icon" href="forum/images/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="forum/images/favicon.ico">
+
+    <link rel="stylesheet" href="/forum/css/messages.css">
+    <link rel="stylesheet" href="/forum/css/mystyle.css">
+    <script type="text/javascript" src="/forum/lib/jquery.min.js"></script>
+</head>
+<body>
+<div id="body">
+
+    <div th:replace="forum/header"></div>
+    <!--*******************************-->
+    <main class="main-wrapper">
+        <div class="container-area">
+            <div class="container-area-left">
+
+                <!--头像 start-->
+                <div class="card-media personal-card" >
+                    <div class="avatar-container-80 z-center">
+                        <a th:href="@{'/forum/u/'+${userId}}" th:title="${userName}" class="author-avatar" target="_blank" >
+                            <img th:src="${avatar}" width="80" height="80" th:title="${userName}" alt="">
+                        </a>
+
+                    </div>
+                    <div class="presonal-info">
+                        <a th:href="@{'/forum/u/'+${userId}}" class="author-name" target="_blank"
+                           th:title="${userName}" z-st="user_card_1_name" th:text="${userName}"></a>
+                    </div>
+                    <div style="margin-top: 17px;margin-bottom: 13px;">
+                        <table style="position: relative;margin: 0 auto;">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <strong><a href="javascipt:void(0);">[[${questionCount}]]</a></strong>
+                                    <span style="font-size: 12px;color:#666;">帖子</span>
+                                </td>
+                                <td>|</td>
+                                <td>
+                                    <strong><a href="javascipt:void(0);">[[${look}]]</a></strong>
+                                    <span style="font-size: 12px;color:#666;">访问</span>
+                                </td>
+                                <td>|</td>
+                                <td>
+                                    <strong><a href="javascipt:void(0);">[[${fansCount}]]</a></strong>
+                                    <span style="font-size: 12px;color:#666;">粉丝</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <div class="btn-area"  th:if="${user !=null}" >
+                        <a href="/uploadQuestion" style="margin-top: 18px;"    class="btn-default-main card-media-mid-btn">发 帖</a><br />
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <!--头像 end-->
+
+                <div class="card-media personal-menu">
+                    <ul class="menu-list">
+                        <li class="menu-list-default"><i></i><a href="/forum/message/notice">通知<sup id="unreadm1" class="subnav-num-sup new-red-public hide"></sup></a></li>
+                        <li class="menu-list-default"><i></i><a href="/forum/message/comments">评论/留言<sup id="unreadm2" class="subnav-num-sup new-red-public hide"></sup></a></li>
+                        <li class="menu-list-default current"><i></i><a href="/forum/message/privateMessage">私信<sup id="unreadm3" class="subnav-num-sup new-red-public hide"></sup></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="container-area-right">
+                <!-- 全部 -->
+                <div class="all-private-letter-page bg-box-radius">
+                    <div class="tab-menu border-bottom">
+                        <ul id="msg_top" class="tab-box">
+                            <li class="current" data-id="all"><a>私信</a></li>
+
+                        </ul>
+                    </div>
+                    <div class="all-message-list">
+                        <!-- 通知 -->
+                        <ul>
+
+                        </ul>
+                        <div class="check-more border-top hide" style="display: none;">
+                            <a id="loadMore" href="javascript:;"></a>
+                        </div>
+                    </div>
+                    <div class="work-null hide">
+                        <div class="work-null-inner">
+                            <span class="null-images"></span>
+                            <div class="work-null-tips">
+                                <p class="subject-title">你还没有收到新的评论/留言</p>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            </div>
+        </div>
+    </main>
+    <!--*******************************-->
+    <div th:replace="forum/footer"></div>
+
+</div>
+
+<!-- 登录弹窗 -->
+<div class="alert-confirm hide">
+    <p class="tips-text tips-alert-text"></p>
+    <div class="text-center pop-btn-con">
+        <input type="button" name="" class="btn-default-main pop-confirm" value="我知道了">
+    </div>
+    <i class="pop-close"></i>
+</div>
+<div class="pop-up-confirm hide">
+    <p class="tips-text"></p>
+    <div class="text-center pop-btn-con">
+        <input type="button" name="" class="btn-default-main pop-confirm" value="确定">
+        <input type="button" name="" class="btn-default-secondary pop-cancel" value="取消">
+    </div>
+    <i class="pop-close"></i>
+</div>
+<div class="toast-fail hide">
+    <span class="toast-pictrue"></span>
+    <div class="toast-tips-text">
+        <span class="toast-first-text"></span> <br>
+        <span class="toast-socend-text"></span>
+    </div>
+</div>
+<div class="toast-success hide">
+    <span class="toast-pictrue"></span>
+    <div class="toast-tips-text">
+        <span class="toast-first-text"></span> <br>
+        <span class="toast-socend-text"></span>
+    </div>
+</div>
+<input type="hidden" value="1" id="pageNo">
+<div class="shade hide"></div>
+
+<script src="/forum/lib/mCustomScrollbar/jquery.mCustomScrollbar.min.js"></script>
+<script type="text/javascript" src="/forum/js/common.js"></script>
+<script type="text/javascript" src="/forum/lib/jquery.easydropdown-version0.1.js"></script>
+
+<script src="/forum/lib/edtiorCrop/js/bootstrap.min.js"></script>
+
+
+<script  th:src="@{/ruoyi/js/ry-ui.js}"></script>
+
+<script th:inline="javascript"> var ctx = [[@{/}]];</script>
+<script>
+    var msgFlag = false;
+    $(function () {
+
+        countmessages();
+
+        loadPrivateMessageList(1);
+        $('#loadMore').on('click',function(){
+            loadPrivateMessageList($('#pageNo').val());
+        });
+        window.onresize = function () {
+            compuMessageWidth()
+        }
+
+    })
+    var pageSize=10;
+    function loadPrivateMessageList(pageNo){
+        $('#loadMore').html('加载中...').parents('.check-more').show();
+        $.ajax({
+            type: 'post',
+            url: ctx+'forum/message/getPrivateMessage',
+            data: {pageNum:pageNo},
+            dataType: 'json',
+            success: function(html){
+
+                    var total=html.total;
+                    var pages= (total + pageSize -1) / pageSize;
+
+                    if(total>0){
+
+                        var rows=html.rows;
+                        var a="";
+                        var ids="";
+                        $.each(rows,function(index,data){
+                            a+="<li>";
+                            a+=' <div class="avatar-container-48">';
+                            a+=' <a class="author-avatar">';
+                            a+=' <img src="https://static.zcool.cn/git_z/z/images/weixinicon.png" width="60" height="60" alt=""></a>';
+                            a+=' </div>';
+                            a+=' <div class="message-content">';
+                            var read="";
+                            if(data.readFlag==1){
+                                read='<span style="color: green;" class=\"message-time\">已读</span>';
+                            }else {
+                                read='<span style="color: gray;" class=\"message-time\">未读</span>';
+                            }
+                            a+='  <p class="author-name"><span class="message-time" style="margin-left: 0px;">'+data.timeDesc+'</span>'+read+'</p>';
+
+                            a+='  <p class="message-content-show" style="width: 672px;">'+data.content+'</p>';
+                            a+='  </div>';
+                            a+='  </li> ';
+                            ids+=data.id+",";
+                        });
+
+                        read(ids);
+
+                        $('.all-message-list ul').append(a);
+
+                        $('.all-message-list').removeClass('hide');
+                        $('.work-null').addClass('hide');
+                        msgFlag == false;
+                        $('#loadMore').text("加载更多").parent().show();
+                        $('#pageNo').val(Number (pageNo)+1);
+                        if($('#pageNo').val()>pages){
+                            $('#loadMore').html('').parents('.check-more').hide();
+                        }
+                    }
+                    else{
+                        $('.all-message-list').addClass('hide');
+                        $('.work-null').removeClass('hide');
+                        $('#loadMore').html('').parents('.check-more').hide();
+                    }
+
+                countmessages();
+
+            },
+            error:function(data) {
+                console.log(data);
+                $('#loadMore').removeClass('hide').html('网络连接失败，点击重试');
+                msgFlag == false
+            },
+        });
+    }
+    function read(ids){
+        $.ajax({
+            type: 'get',
+            url:ctx+ 'forum/message/updateReadFlag',
+            data:{"ids":ids},
+            dataType: 'json',
+            success: function(data){
+                if(data.code==0){
+                }else{
+                    console.log(data);
+                }
+            },
+            error:function(data) {
+                console.log(data);
+            },
+        });
+    }
+    var compuMessageWidth = function () {
+        $('.all-message-list ul li').each(function (index, ele) {
+            var messageWidth = $(ele).children('.message-content').width();
+            var buttonAreaWidth = $(ele).children('.button-area').width();
+            var messageConWidth = (messageWidth - 100) + 'px';
+            $(ele).children('.message-content').find('.message-content-show').css({'width': messageConWidth});
+        });
+    };
+
+    function countmessages(){
+        $.ajax({
+            type: 'get',
+            url:ctx+ 'forum/message/countMessages',
+            dataType: 'json',
+            success: function(data){
+                if(data != null){
+                    if(data.data.mcount > 0){
+                        $('#unreadm1').removeClass('hide').html(data.data.mcount);
+                    }
+                    if(data.data.ccount > 0){
+                        $('#unreadm2').removeClass('hide').html(data.data.ccount);
+                    }
+                    if(data.data.pcount > 0){
+                        $('#unreadm3').removeClass('hide').html(data.data.pcount);
+                        $('#allRead').removeClass('disabled')
+                    }
+                }
+            },
+            error:function(data) {
+                console.log(data);
+            },
+        });
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<header id="zHeader">
+    <nav>
+        <input type="hidden" id="lanage" value="zh">
+
+        <div class="logo" style="font-size: 22px;line-height: 22px;float: right;"><a href="/">ruoyi-plus官方论坛 </a></div>
+        <div class="header-menu-bar">
+            <div class="search-input-hull hide">
+                <span class="search-ipt"></span>
+                <input type="text" placeholder="" value="" id="nav-search-ipt">
+                <span class="search-cancel"></span>
+                <div id="search-content" class="search-content">
+                    <div class="search-content-list"></div>
+                </div>
+            </div>
+
+
+            <div class="menu-box">
+                <ul class="menu-list-content">
+                    <li th:class="${pageUrl=='/forum/index'?'current':''}"><a class="menu-list-box" href="/forum/index" z-st="nav_tab_home">首页</a></li>
+                    <li th:each="item,temp:${@forum.selectNavCategories()}" th:class="${pageUrl=='/forum/category/'+item.categoryId?'current':''}"  >
+                        <a class="menu-list-box" th:href="${'/forum/category/'+item.categoryId}" th:text="${item.categoryName}"></a>
+
+                    </li>
+                    <li class="more-menu header-menu-withmore " th:if="${@forum.showMore()==true}">
+                            <span class="menu-tit-box" id="header-more" z-st="nav_tab_more"><i></i>
+                           <!-- <sup class="subnav-dot-sup" style="left: 40px;"></sup>-->
+                            </span>
+                        <div class="menu-list hide">
+                            <p th:each="item,temp:${@forum.selectNavCategoriesMore()}"  th:class="${pageUrl=='/forum/category/'+item.categoryId?'current':''}"  >
+                                <a th:href="${'/forum/category/'+item.categoryId}" th:text="${item.categoryName}"></a>
+                            </p>
+
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--<div class="search" id="mnavh" style="margin-top: 0px;margin-bottom: 0px;border: none;">
+            <i></i>
+        </div>-->
+        <div class="user-center">
+            <ul class="login hide">
+                <li class="message">
+                    <a  href="/forum/message/notice"   class="message-list" id="nav_msgbox"><i></i>
+                        <sup id="msgCount" style="width: 0px;height: 9px;min-width: inherit;" class="subnav-num-sup new-red-public hide"></sup>
+                    </a>
+                    <!--<div id="msgBox" class="menu-list message-box hide">
+                        <section>消息盒 <span id="clean-box-msg" class="clean-box-msg" style="color: #444;">清空 </span></section>
+                        <div id="contetn-2" class="message-box-list-wrapper">
+                            <ul class="message-box-list">
+                            </ul>
+                        </div>
+                        <a href="/forum/message/notice" class="check-all" >查看全部 </a>
+                    </div>-->
+                </li>
+                <!-- <script>
+                     $("#nav_msgbox").click(function(){
+                         $("#msgBox").toggle();
+                     });
+                 </script>-->
+                <li class="user"></li>
+                <script id="user-info" type="text/html">
+                    <div class="avatar-container-30">
+                        <a href="{{data.pageUrl}}" class="user-list" id="header-logined-user-face"  ><img src="{{data.avatar}}" title="{{data.username}}" alt="{{data.username}}"></a>
+                    </div>
+                    <div class="menu-list user-box hide"  style="z-index: 9999999">
+                        <section><a href="{{data.pageUrl}}"  >{{data.username}}</a></section>
+
+                        <div class="user-box-list">
+                            <div class="user-box-list-area">
+
+                                <p class="works-manange"><a href="/setting" z-st="nav_userbox_setting" id="usercenter-menu-account-focus">资料与账号</a></p>
+                            </div>
+
+                            <div class="user-box-list-area">
+                                <p class="works-manange"><a href="/myQuestion"  >我的帖子</a></p>
+                                <p class="works-manange"><a href="/myFavourite" >我的收藏</a></p>
+                                <p class="works-manange"><a href="/myFocus" id="usercenter-menu-focus"  >我的关注</a></p>
+
+                            </div>
+
+                            <div class="user-box-list-area">
+                                <p class="works-manange"><a onclick="deleteUidToCookie()" href="/logout" z-st="nav_userbox_logout">退出</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </script>
+            </ul>
+            <ul class="unlogin">
+                <li><a href="/login"  class="nav-unlogin">登录<i></i></a>
+                    <a href="/register">注册</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <script>
+        var isLogin='[[${user!=null}]]';
+        $(function(){
+            if(islogin=='true'){
+                countmessagesTop();
+            }
+        })
+        function countmessagesTop(){
+            $.ajax({
+                type: 'get',
+                url:ctx+ 'forum/message/countMessages',
+                dataType: 'json',
+                success: function(data){
+                    if(data.code == 0){
+                        if(data.data.mcount > 0||data.data.ccount > 0||data.data.pcount > 0){
+
+                            $("#msgCount").removeClass("hide");
+                        }
+                    }
+                },
+                error:function(data) {
+                    console.log(data);
+                },
+            });
+        }
+    </script>
+
+</header>
